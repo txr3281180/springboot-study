@@ -1,0 +1,11 @@
+=====================@Bean作用域==================================================
+@Bean
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public SchedulerFactoryBean schedulerFactoryBean(){
+    SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
+    return schedulerFactoryBean;
+}
+
+配置原型  @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+
+

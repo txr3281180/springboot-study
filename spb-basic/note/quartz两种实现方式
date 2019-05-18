@@ -1,0 +1,101 @@
+Spring创建JobDetail的两种方式
+
+1.利用JobDetailBean包装QuartzJobBean子类（即Job类）的实例.
+   详见 该项目代码  com.txr.study.platform.global.job.quartz
+
+-----------------------------------------
+2.利用MethodInvokingJobDetailFactoryBean工厂Bean包装普通的Java对象（即Job类）。
+   采用该方式创建Job类, 无须继承父类, 直接配置MethodInvokingJobDetailFactoryBean即可.
+   但需要指定一下两个属性：
+       
+        targetObject:指定包含任务执行体的Bean实例。
+        targetMethod:指定将指定Bean实例的该方法包装成任务的执行体。
+
+代码示例：
+
+@Configuration
+public class QuartzConfig {
+    /**
+     * quartz 配置
+     *   （添加 pom.xml，加载 jar 包）
+     */
+
+    // 配置中设定了
+    // ① targetMethod: 指定需要定时执行scheduleInfoAction中的simpleJobTest()方法
+    // ② concurrent：对于相同的JobDetail，当指定多个Trigger时, 很可能第一个job完成之前，
+    //      第二个job就开始了。指定concurrent设为false，多个job不会并发运行，
+    //      第二个job将不会在第一个job完成之前开始。
+    // ③ cronExpression：0/10 * * * * ?表示每10秒执行一次，具体可参考附表。
+    // ④ triggers：通过再添加其他的ref元素可在list中放置多个触发器。 scheduleInfoAction中的simpleJobTest()方法
+    /**
+     * attention:
+     * Details：配置定时任务
+     */
+    @Bean(name = "jobDetail")
+    public MethodInvokingJobDetailFactoryBean detailFactoryBean(TestQuartz task) {//TestQuartz为需要执行的任务
+        MethodInvokingJobDetailFactoryBean jobDetail = new MethodInvokingJobDetailFactoryBean();
+        /*
+         *  是否并发执行
+         *  例如每5s执行一次任务，但是当前任务还没有执行完，就已经过了5s了，
+         *  如果此处为true，则下一个任务会执行，如果此处为false，则下一个任务会等待上一个任务执行完后，再开始执行
+         */
+        jobDetail.setConcurrent(false);
+        jobDetail.setName("srd-chhliu");// 设置任务的名字
+        jobDetail.setGroup("srd");// 设置任务的分组，这些属性都可以存储在数据库中，在多任务的时候使用
+
+        /*
+         * 为需要执行的实体类对应的对象
+         */
+        jobDetail.setTargetObject(task);
+
+        /*
+         * sayHello为需要执行的方法
+         * 通过这几个配置，告诉JobDetailFactoryBean我们需要执行定时执行TestQuartz类中的sayHello方法
+         */
+        jobDetail.setTargetMethod("sayHello");
+        return jobDetail;
+    }
+
+    /**
+     * attention:
+     * Details：配置定时任务的触发器，也就是什么时候触发执行定时任务
+     */
+    @Bean(name = "jobTrigger")
+    public CronTriggerFactoryBean cronJobTrigger(MethodInvokingJobDetailFactoryBean jobDetail) {
+        CronTriggerFactoryBean tigger = new CronTriggerFactoryBean();
+        tigger.setJobDetail(jobDetail.getObject());
+        tigger.setCronExpression("20 * * * * ?");// 初始时的cron表达式
+        tigger.setName("srd-chhliu");// trigger的name
+        return tigger;
+
+    }
+
+    /**
+     * attention:
+     * Details：定义quartz调度工厂
+     */
+    @Bean(name = "scheduler")
+    public SchedulerFactoryBean schedulerFactory(Trigger cronJobTrigger) {
+        SchedulerFactoryBean bean = new SchedulerFactoryBean();
+        // 用于quartz集群,QuartzScheduler 启动时更新己存在的Job
+        bean.setOverwriteExistingJobs(true);
+        // 延时启动，应用启动1秒后
+        bean.setStartupDelay(1);
+        // 注册触发器
+        bean.setTriggers(cronJobTrigger);
+        return bean;
+    }
+}
+
+
+@Configuration
+@Component // 此注解必加
+@EnableScheduling // 此注解必加
+public class TestQuartz {
+
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
+    public void sayHello(){
+        logger.info("Quartz 定时调度 ======================>");
+    }
+}

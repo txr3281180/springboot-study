@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<assembly
+        xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+    <id>assembly</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+
+    <!--是否包含总文件夹-->
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <!--如果includeBaseDirectory选择true, 该标签则是给父目录命名-->
+    <baseDirectory>springBootTest</baseDirectory>
+
+    <fileSets>
+        <fileSet>
+            <!--需要打包的路径-->
+            <directory>${project.basedir}/src/main/resources</directory>
+            <!--打包后输出的路径-->
+            <outputDirectory>/conf</outputDirectory>
+            <includes><!--需要打包的文件-->
+                <include>application*.properties</include>
+                <include>*.xml</include>
+            </includes>
+            <!--不需要打包的文件-->
+            <!--  <excludes>
+                <exclude>*.xml</exclude>
+            </excludes>-->
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/bin/2</directory>
+            <outputDirectory>/bin</outputDirectory>
+            <includes>
+                <include>*.sh</include>
+                <include>*.param</include>
+            </includes>
+            <!--在linux上 755 表示对该文件具有读、写、执行权限-->
+            <fileMode>0755</fileMode>
+        </fileSet>
+       <!-- <fileSet>
+            <directory>${project.basedir}/src/main/resources</directory>
+            <outputDirectory>/bin</outputDirectory>
+            <includes>
+                <include>*.bat</include>
+            </includes>
+        </fileSet>-->
+    </fileSets>
+    <dependencySets>  <!--该标签可省略-->
+        <dependencySet>
+            <outputDirectory>/lib</outputDirectory>
+            <useProjectArtifact>true</useProjectArtifact>
+            <unpack>true</unpack>  <!--如果为 true， lib中打进去的都是文件夹-->
+            <scope>runtime</scope>
+            <excludes>
+                <!--排除 ： ProjectName-1.0-SNAPSHOT.jar 这个包-->
+                <!--<exclude>*:ProjectName:*</exclude>-->
+                <exclude>*:*:*</exclude>  <!--排除所有的其他jar包-->
+            </excludes>
+        </dependencySet>
+    </dependencySets>
+    <files>
+        <file>
+            <!--把target目录下的 xx ProjectName xx.jar.original文件打包到本次包的lib目录并且更改名字为改配置指定的名称.jar-->
+            <!--<source>target/ProjectName.jar.original</source>-->
+            <!--ProjectName.jar.original 打成的jar包运行时会报错“ProjectName.jar中没有主清单属性”， 所以需要spring-boot-maven-plugin 插件打好 jar 包-->
+
+            <source>target/${project.name}.jar</source>
+            <outputDirectory>/lib</outputDirectory>
+            <!--重新命名-->
+            <destName>${project.name}.jar</destName>
+        </file>
+    </files>
+</assembly>

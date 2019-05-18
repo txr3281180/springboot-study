@@ -1,0 +1,6 @@
+# Initializers  多个Initializer 用 ",\" 换行
+org.springframework.context.ApplicationContextInitializer=\
+com.txr.spbbasic.global.listener.HelloApplicationContextInitializer
+
+org.springframework.boot.SpringApplicationRunListener=\
+com.txr.spbbasic.global.listener.HelloSpringApplicationRunListener
