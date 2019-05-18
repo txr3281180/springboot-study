@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>债券列表</title>
+		<link rel="shortcut icon" th:href="@{/favicon.ico}"/>
+		<link rel="bookmark" th:href="@{/favicon.ico}"/>
+		<!-- Bootstrap core CSS -->
+		<link href="css/bootstrap.min.css"  th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" rel="stylesheet">
+		<!-- Custom styles for this template -->
+		<link href="css/dashboard.css" th:href="@{/css/dashboard.css}" rel="stylesheet">
+	</head>
+
+	<body>
+
+		<div th:replace="~{commons/bar::topbar}"></div>
+
+		<div class="container-fluid">
+			<div class="row">
+
+				<div th:replace="~{commons/bar::#sidebar(activeUri='bondList')}"></div>
+
+				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+					<h4>债券详情</h4>
+					<form th:action="@{/haha}" method="post">
+						<!--
+						  发送 put delete 请求
+							1.spring mvc 中配置 HiddenHttpMethodFilter; (spring boot 自动配置好了)
+							2.页面创建一个post表单
+							3.创建一个input项， name="_method"; 值就是要指定的请求方式
+
+						  post 提交 通过属性name指定要提交哪些字段
+						-->
+						<input type="hidden" name="_method" value="put" th:if="false" /> <!--todo 判断是需要put请求-->
+
+						<input type="hidden" name="bondKey" th:value="${bond.bondKey}" th:if="false" />
+						<!--
+							 type="text"      th:value="${}"  回显
+							 type="checkbox"  th:checked="${xxx==yyy}" 回显
+
+							 select option  th:selected="${xxx==yyy}" 回显
+						-->
+						<hr>
+						<div class="form-group row">
+							<label for="shortName" class="col-sm-1 col-form-label col-form-label-sm" >债券名称</label>
+							<div class="col-sm-5">
+								<input type="text" name="shortName" class="form-control" th:value="${bond.shortName}" id="shortName" placeholder="Example input" disabled>
+							</div>
+						</div>
+						<!--下拉框-->
+						<div class="form-group row">
+							<label for="bondType" class="col-sm-1 col-form-label col-form-label-sm" >债券类型</label>
+							<div class="col-sm-5">
+								<select class="form-control" id="bondType" style="background-color: darksalmon">
+									<option th:value="${bType}" th:each="bType:${bondTypes}" th:text="${bType}" th:selected="${bType==bond.bondType}"></option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="maturityTerm" class="col-sm-1 col-form-label col-form-label-sm" >期限</label>
+							<div class="col-sm-5">
+								<input type="text" name="maturityTerm" class="form-control" th:value="${bond.maturityTerm}" id="maturityTerm" placeholder="Example input">
+							</div>
+						</div>
+						<!--单选框-->
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="D" disabled th:checked="${bond.termUnit=='D'}">
+							<label class="form-check-label" for="inlineCheckbox1">D</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="M" disabled th:checked="${bond.termUnit=='M'}">
+							<label class="form-check-label" for="inlineCheckbox2">M</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="Y" disabled th:checked="${bond.termUnit=='Y'}">
+							<label class="form-check-label" for="inlineCheckbox3">Y</label>
+						</div>
+
+						<hr>
+						<div class="form-group row">
+							<label for="issuerName" class="col-sm-1 col-form-label col-form-label-sm" >发行人名称</label>
+							<div class="col-sm-5">
+								<input type="text" name="issuerName" class="form-control" th:value="${issuer.issuerName}" id="issuerName" placeholder="Example input">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="province" class="col-sm-1 col-form-label col-form-label-sm" >省份</label>
+							<div class="col-sm-5">
+								<input type="text" name="province" class="form-control" th:value="${issuer.province}" id="province" placeholder="Example input">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="registerCapital" class="col-sm-1 col-form-label col-form-label-sm" >注册资金</label>
+							<div class="col-sm-5">
+								<input type="text" name="registerCapital" class="form-control" th:value="${issuer.registerCapital}" id="registerCapital" placeholder="Example input">
+							</div>
+						</div>
+						<div class="form-group row">
+							<label for="swSubSector" class="col-sm-1 col-form-label col-form-label-sm" >行业</label>
+							<div class="col-sm-5">
+								<input type="text" name="swSubSector" class="form-control" th:value="${issuer.swSubSector}" id="swSubSector" placeholder="Example input">
+							</div>
+						</div>
+
+						<hr>
+						<!--button 是配合 form 一起使用的，一个button 作用一个表单域-->
+						<a href="javascript:history.back(-1)" class="btn btn-primary" style="margin-left: 10px">返回</a>
+						<button type="submit" class="btn btn-primary" style="margin-left: 50px">搜索</button>
+					</form>
+				</main>
+			</div>
+		</div>
+	</body>
+</html>

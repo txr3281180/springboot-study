@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.txr.spbdatamybatis.repository.mapper.IssuerInfoMapper">
+
+    <resultMap id="issuer_column_mapping" type="com.txr.spbdatamybatis.repository.entity.IssuerInfo">
+        <id column="id" property="id"/>
+        <result column="issuer_code" property="issuerCode" />
+        <result column="issuer_name" property="issuerName" />
+        <result column="sw_sector" property="swSector" />
+        <result column="sw_sub_sector" property="swSubSector" />
+        <result column="province" property="province" />
+        <result column="city" property="city" />
+        <result column="register_capital" property="registerCapital" />
+        <result column="modify_date" property="modifyDate" />
+        <result column="create_date" property="createDate" />
+    </resultMap>
+    <select id="getIssuerByIssuerCode" resultMap="issuer_column_mapping">
+        SELECT * FROM issuer_info WHERE issuer_code = #{issuerCode}
+    </select>
+
+</mapper>

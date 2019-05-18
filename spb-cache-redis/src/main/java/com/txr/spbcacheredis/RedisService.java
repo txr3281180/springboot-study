@@ -1,8 +1,9 @@
 package com.txr.spbcacheredis;
 
 import com.alibaba.fastjson.JSON;
-import com.spb.redis.spbredis.common.RedisMessage;
-import com.spb.redis.spbredis.config.CacheConfig;
+
+import com.txr.spbcacheredis.common.RedisMessage;
+import com.txr.spbcacheredis.config.CacheConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

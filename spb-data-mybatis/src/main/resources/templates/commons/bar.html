@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>公共组件</title>
+</head>
+<body>
+
+    <!-- th:fragment 抽取公共组件供其他页面使用 -->
+    <!-- 头部 topbar-->
+    <nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0" th:fragment="topbar">
+        <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#index.html">债券详情</a>
+        <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
+        <ul class="navbar-nav px-3">
+            <li class="nav-item text-nowrap">
+                <a class="nav-link" th:href="@{/logout}">退出</a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- 树形菜单 -->
+    <!-- 公共组件抽取方式2   添加 id="xxx"   -->
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar" id="sidebar">
+        <div class="sidebar-sticky">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <!-- th:class 动态高亮菜单标签 -->
+                    <a th:class="${activeUri=='main'?'nav-link active':'nav-link'}" th:href="@{/main}" class="nav-link active">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        主页 <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file">
+                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path>
+                            <polyline points="13 2 13 9 20 9"></polyline>
+                        </svg>
+                        发行人
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:class="${activeUri=='template'?'nav-link active':'nav-link'}" th:href="@{/hello}" >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        模板页
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:class="${activeUri=='bondList'?'nav-link active':'nav-link'}"  th:href="@{/bond/info(page=1)}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                        债券列表
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bar-chart-2">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                        Reports
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                        Integrations
+                    </a>
+                </li>
+            </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+                <span>Saved reports</span>
+                <a class="d-flex align-items-center text-muted" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#index.html">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                </a>
+            </h6>
+
+            <ul class="nav flex-column mb-2">
+                <li class="nav-item">
+                    <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        Current month
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        Last quarter
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        Social engagement
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="http://getbootstrap.com/docs/4.0/examples/dashboard/#index.html">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                        Year-end sale
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!--分页样式1-->
+    <nav aria-label="Page navigation example"  th:fragment="pagebar1">
+        <!-- 处理页数大于7 的情况 -->
+        <ul class="pagination justify-content-center" >
+            <li class="page-item" data-th-classappend="${PageNum eq 1} ? 'active' : ''" >
+                <a th:href="@{/bond/info(page=1)}" class="page-link" >首页</a>
+            </li>
+            <li class="page-item" data-th-classappend="${PageNum == 1} ? 'disabled' : ''">
+                <a th:href="@{/bond/info(page=${PageNum - 1})}" class="page-link" >
+                    <span aria-hidden="true">上一页</span>
+                </a>
+            </li>
+
+            <li class="page-item" data-th-each="i : ${#numbers.sequence(FirstPage,LastPage)}"
+                data-th-classappend="${PageNum eq i} ? 'active' : ''" >
+                <a class="page-link" th:href="@{/bond/info(page=${i})}" >
+                    <span data-th-text="${i}"></span>
+                </a>
+            </li>
+
+            <li class="page-item" data-th-classappend="${PageNum eq Pages} ? 'disabled' : ''">
+                <a  th:href="@{/bond/info(page=${PageNum} + 1)}" class="page-link" aria-label="Next">
+                    <span aria-hidden="true">下一页</span>
+                </a>
+            </li>
+            <li class="page-item" data-th-classappend="${PageNum eq Pages} ? 'active' : ''" >
+                <a th:href="@{/bond/info(page=${Pages})}" class="page-link" >尾页</a>
+            </li>
+            <li class="page-item">
+                <a href="javascript:void(0);" class="page-link">
+                    <span aria-hidden="true"> 共[[${Pages}]]页|[[${Total}]]条</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!--分页样式2-->
+    <nav aria-label="Page navigation example"  th:fragment="pagebar2">
+        <!-- 处理页数大于7 的情况 -->
+        <ul class="pagination justify-content-end" data-th-if="${Pages gt 7}" >
+            <!-- 上一页 -->
+            <li class="page-item" data-th-classappend="${PageNum == 1} ? 'disabled' : ''">
+                <a th:href="@{/bond/info(page=${PageNum - 1})}" class="page-link" >
+                    <span aria-hidden="true">上一页</span>
+                </a>
+            </li>
+
+            <!-- 首页 -->
+            <li class="page-item" data-th-classappend="${PageNum eq 1} ? 'active' : ''" >
+                <a th:href="@{/bond/info(page=1)}" class="page-link" >1</a>
+            </li>
+
+
+            <!-- 当前页面小于等于4 -->
+            <li class="page-item" data-th-if="${PageNum le 4}" data-th-each="i : ${#numbers.sequence(2,5)}"
+                data-th-classappend="${PageNum eq i} ? 'active' : ''" >
+                <a class="page-link" th:href="@{/bond/info(page=${i})}" >
+                    <span data-th-text="${i}"></span>
+                </a>
+            </li>
+
+            <li class="page-item disabled" data-th-if="${PageNum le 4}">
+                <a href="javascript:void(0);" class="page-link">
+                    <span aria-hidden="true">...</span>
+                </a>
+            </li>
+
+            <!-- 最后一页与当前页面之差，小于等于3 -->
+            <li class="page-item disabled" data-th-if="${(Pages- PageNum) le 3}">
+                <a href="javascript:void(0);" class="page-link">
+                    <span aria-hidden="true">...</span>
+                </a>
+            </li>
+            <li class="page-item" data-th-if="${(Pages-PageNum) le 3}" data-th-each="i:${#numbers.sequence(Pages-4, Pages-1)}"
+                data-th-classappend="${PageNum eq i} ? 'active' : ''" >
+                <a class="page-link" th:href="@{/bond/info(page=${i})}">
+                    <span data-th-text="${i}"></span>
+                </a>
+            </li>
+
+            <!-- 最后一页与当前页面之差大于3，且  当前页面大于4-->
+            <li class="page-item disabled" data-th-if="${(PageNum gt 4) && ((Pages- PageNum) gt 3 )}">
+                <a href="javascript:void(0);" class="page-link">
+                    <span aria-hidden="true">...</span>
+                </a>
+            </li>
+            <li class="page-item" data-th-if="${(PageNum gt 4) && ((Pages- PageNum) gt 3 )}" >
+                <a th:href="@{/bond/info(page=${PageNum - 1})}" class="page-link">[[${PageNum - 1}]]</a>
+            </li>
+            <li class="page-item active" data-th-if="${(PageNum gt 4) && ((Pages- PageNum) gt 3 )}">
+                <a th:href="@{/bond/info(page=${PageNum})}" class="page-link">[[${PageNum}]]</a>
+            </li>
+            <li class="page-item" data-th-if="${(PageNum gt 4) && ((Pages-PageNum) gt 3 )}">
+                <a th:href="@{/bond/info(page=${PageNum + 1})}" class="page-link" >[[${PageNum + 1}]]</a>
+            </li>
+
+            <li class="page-item disabled"  data-th-if="${(PageNum gt 4) && ((Pages-PageNum) gt 3 )}">
+                <a href="javascript:void(0);" class="page-link">
+                    <span aria-hidden="true">...</span>
+                </a>
+            </li>
+
+            <!-- 最后一页 -->
+            <li class="page-item" data-th-classappend="${PageNum eq Pages} ? 'active' : ''" >
+                <a th:href="@{/bond/info(page=${Pages})}" class="page-link" >[[${Pages}]]</a>
+            </li>
+
+            <!-- 下一页 -->
+            <li class="page-item" data-th-classappend="${PageNum eq Pages} ? 'disabled' : ''">
+                <a  th:href="@{/bond/info(page=${PageNum} + 1)}" class="page-link" aria-label="Next">
+                    <span aria-hidden="true">下一页</span>
+                </a>
+            </li>
+
+            <li class="page-item">
+                <a href="javascript:void(0);" class="page-link">
+                    <span aria-hidden="true">共 [[${Total}]] 条数据</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)http://getbootstrap.com/docs/4.0/examples/dashboard/ -->
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+
+		<title>债券列表</title>
+		<link rel="shortcut icon" th:href="@{/favicon.ico}"/>
+		<link rel="bookmark" th:href="@{/favicon.ico}"/>
+		<!-- Bootstrap core CSS -->
+		<link href="css/bootstrap.min.css"  th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" rel="stylesheet">
+		<!-- Custom styles for this template -->
+		<link href="css/dashboard.css" th:href="@{/css/dashboard.css}" rel="stylesheet">
+	</head>
+
+	<body>
+
+		<div th:replace="~{commons/bar::topbar}"></div>
+
+		<div class="container-fluid">
+			<div class="row">
+
+				<div th:replace="~{commons/bar::#sidebar(activeUri='bondList')}"></div>
+
+				<main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4">
+					<h4>债券列表</h4>
+					<div class="table-responsive">
+						<table class="table table-striped table-sm">
+							<thead>
+							<tr>
+								<td><a href="javascript:void(0);">债券名称</a></td>  <!--可以排序-->
+								<td>发行人</td>
+								<td>债券类型</td>
+								<td>债券子类型</td>
+								<td>票面利率</td>
+								<td>期限</td>
+								<td>到期日</td>
+								<td>发行开始日期</td>
+								<td>发行结束日期</td>
+							</tr>
+							</thead>
+							<tbody>
+								<tr th:each="bond:${bonds}">
+									<td><a  th:href="@{/bond/detail(bondKey=${bond.bondKey})}">[[${bond.shortName}]]</a></td>
+									<td th:text="${bond.issuerCode}"></td>
+									<td th:text="${bond.bondType}"></td>
+									<td th:text="${bond.bondSubtype}"></td>
+									<td th:text="${bond.couponRate}"></td>
+									<td th:text="${bond.maturityTerm + bond.termUnit}"></td>
+									<td th:text="${bond.maturityDate}"></td>
+									<td th:text="${bond.issueStartDate}"></td>
+									<td th:text="${bond.issueEndDate}"></td>
+									<!--<td th:text="${bond.bondType}=='FIN'?'金融债':'企业债'"></td>--> <!-- 表达式 -->
+									<!--<td th:text="${#dates.format(bond.issueEndDate, 'yyyyMMdd')}"></td>--> <!--日期格式化-->
+								</tr>
+							</tbody>
+						</table>
+						<!--分布组件引用-->
+						<div th:replace="~{commons/bar::pagebar1}"></div>
+					</div>
+				</main>
+			</div>
+		</div>
+	</body>
+</html>

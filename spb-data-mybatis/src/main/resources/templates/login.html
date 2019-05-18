@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"> <!-- 引入 thymeleaf 命名空间 -->
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<title>登录</title>
+		<link rel="shortcut icon" th:href="@{/favicon.ico}"/>
+		<link rel="bookmark" th:href="@{/favicon.ico}"/>
+		<!-- Bootstrap core CSS -->
+		<!--<link href="css/bootstrap.min.css" rel="stylesheet">-->  <!--引入项目当前目录资源-->
+		<link th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.css}" rel="stylesheet"> <!--通过webjars引入资源-->
+		<!-- Custom styles for this template -->  <!--th:href 可以自动添加url前缀 -->
+		<!--<link href="css/signin.css" rel="stylesheet">-->
+		<link th:href="@{/css/signin.css}" rel="stylesheet">
+	</head>
+
+	<body class="text-center">
+		<!--表单指定 method , 指定 th:action -->
+		<form class="form-signin" th:action="@{/login}" method="post">
+			<!-- src="img/bootstrap-solid.svg" // th:src 会替换 src 重新渲染 img -->
+			<img class="mb-4" th:src="@{/favicon.ico}"  alt="" width="72" height="72">
+			<h1 class="h3 mb-3 font-weight-normal" th:text="#{login.tip}">Please sign in</h1>
+			<p style="color: red" th:text="${msg}" th:if="${not #strings.isEmpty(msg)}"></p>
+			<label class="sr-only" th:text="#{login.username}">Username</label>
+			<!-- 设置name="username" name="password" 传参  Ctrl+ F9重新编译模板引擎 -->
+			<input type="text" name="username" class="form-control" th:placeholder="#{login.username}" placeholder="Username" required="" autofocus="">
+			<label class="sr-only" th:text="#{login.password}">Password</label>
+			<input type="password" name="password" class="form-control" th:placeholder="#{login.password}" placeholder="Password" required="">
+			<div class="checkbox mb-3">
+				<label>
+          <input type="checkbox" value="remember-me"> [[#{login.remember}]]
+        </label>
+			</div>
+			<button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.button}">Sign in</button>
+			<p class="mt-5 mb-3 text-muted">© 2017-2018</p>
+			<a class="btn btn-sm" th:href="@{/index(l='zh_CN')}">中文</a>
+			<a class="btn btn-sm" th:href="@{/index(l='en_US')}">English</a>
+		</form>
+
+	</body>
+
+</html>
