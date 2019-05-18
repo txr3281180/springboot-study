@@ -2,11 +2,9 @@ package com.txr.spbbasic.service;
 
 
 import com.txr.spbbasic.global.config.cache.CacheConfig;
-import com.txr.spbbasic.global.exception.ExceptionStack;
 import com.txr.spbbasic.global.utils.Json.JsonUtils;
 import com.txr.spbbasic.repository.entity.RedisMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,6 +24,7 @@ import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ErrorHandler;
+import txr.common.exception.ExceptionStack;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,9 +39,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Configuration
 @Service
+@Slf4j
 public class RedisService {
-
-    private final Logger logger = LoggerFactory.getLogger(RedisService.class);
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -391,7 +389,7 @@ public class RedisService {
         redisMessageListenerContainer.setErrorHandler(new ErrorHandler() {
             @Override
             public void handleError(Throwable throwable) {
-                logger.error("redis message listener container error: {}", ExceptionStack.getExceptionStack(new Exception(throwable)));
+                log.error("redis message listener container error: {}", ExceptionStack.getExceptionStack(new Exception(throwable)));
             }
         });
         redisMessageListenerContainer.addMessageListener(
@@ -417,7 +415,7 @@ public class RedisService {
     //===============================================================================================
     public void set(String redisKey, String content) {
         valueOperations().set(joinKey(redisKey), content);
-        logger.info("ValueOperations set to redis: " + redisKey + " " + content);
+        log.info("ValueOperations set to redis: " + redisKey + " " + content);
     }
 
     public Map<String, Object> getRedis(String redisKey) {
