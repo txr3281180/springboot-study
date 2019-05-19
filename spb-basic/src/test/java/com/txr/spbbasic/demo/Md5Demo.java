@@ -2,7 +2,7 @@ package com.txr.spbbasic.demo;
 
 
 import com.txr.spbbasic.controller.model.Bond;
-import com.txr.spbbasic.repository.access.BondAccess;
+import com.txr.spbbasic.repository.BondAccess;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 

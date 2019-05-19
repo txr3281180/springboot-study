@@ -1,6 +1,5 @@
 package com.txr.spbbasic;
 
-import com.txr.spbbasic.global.utils.Json.JsonUtils;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -10,8 +9,6 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BaseDemo {
@@ -132,23 +129,6 @@ public class BaseDemo {
 
 
     @Test
-    public void testJson() {
-        Map<Object, Object> map = new HashMap<>();
-        map.put("Type", "55617");
-        map.put("Subject", "172.16.73.144:50110_7488");
-        map.put("MessageID", "172.16.73.144:50110_7488");
-        map.put("ReplyTo", "QB.GATEWAY.AckQueue.dfzqr.18888_1");
-
-        Map<Object, Object> meg = new HashMap<>();
-        meg.put("UnderwriterID", "402880f034219aed0134219e1f500795");
-        map.put("xUPPCnewBondMarginGuideInfoReq", meg);
-
-
-        String s = JsonUtils.toJson(map);
-        System.out.println(s);
-    }
-
-    @Test
     public void testHost() throws UnknownHostException {
         InetAddress localHost = InetAddress.getLocalHost();
 
@@ -180,7 +160,7 @@ public class BaseDemo {
     }
 
     @Test
-    public void testResutn1(){
+    public void testResult1(){
         System.out.println(testReturn());
     }
 

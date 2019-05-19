@@ -1,7 +1,7 @@
 package com.txr.spbbasic.java8;
 
 import com.txr.spbbasic.controller.model.Bond;
-import com.txr.spbbasic.repository.access.BondAccess;
+import com.txr.spbbasic.repository.BondAccess;
 import org.junit.Test;
 
 import java.util.Arrays;

@@ -18,7 +18,7 @@ public class BondCacheService extends EhCacheBase {
 
         @Cacheable(value = EhCacheConfig.EH_CACHE_KEY, key = "#bondKey")
            》 spring boot 自带缓存
-           》 如果指定 spring.cache.ehcache.config=classpath:ehcache-Template.xml 并配置 ehcache-Template.xml 则使用 ehcache
+           》 如果指定 spring.cache.ehcache.component=classpath:ehcache-Template.xml 并配置 ehcache-Template.xml 则使用 ehcache
 
         @Cacheable(value = EhCacheConfig.EH_CACHE_KEY, cacheManager = "ehCacheManager", key = "#bondKey")  //使用CacheManager
             》ehcache >>>> cacheManager = "ehCacheManager" 对应的是EhCacheConfig Bean 的方法名

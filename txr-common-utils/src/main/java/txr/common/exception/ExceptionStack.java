@@ -9,6 +9,7 @@ import java.io.StringWriter;
  */
 public class ExceptionStack {
 
+    /*追加异常详细信息*/
     public static String getExceptionStack(Exception e) {
         String exceptionString = "";
         StringWriter sw = null;

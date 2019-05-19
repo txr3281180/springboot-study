@@ -1,0 +1,3 @@
+# ICO 接管
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.txr.spbbasicstarter.TxrAutoConfigurationService
