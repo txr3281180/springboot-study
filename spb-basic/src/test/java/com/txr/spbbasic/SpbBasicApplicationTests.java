@@ -1,6 +1,7 @@
 package com.txr.spbbasic;
 
 import com.txr.spbbasicstarter.TxrAutoConfigurerProcessor;
+import com.txr.spbbasicstarter.condtional.OsSelectBean;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,4 +21,16 @@ public class SpbBasicApplicationTests {
         System.out.println(configIpAndPort);
     }
 
+    @Autowired
+    private OsSelectBean windowsBean;
+
+    @Autowired
+    private OsSelectBean linuxBean;
+
+    //vm options  -Dos.name=linux
+    @Test
+    public void testOsBean() {
+        OsSelectBean osSelectBean = windowsBean != null ? windowsBean:linuxBean;
+        osSelectBean.printlnOs();
+    }
 }
