@@ -23,5 +23,11 @@ public class MainClass {
 		//简便操作
 		bodyH.setNextHandler(headH).setNextHandler(tailH);
 		bodyH.HandlerCar();
+
+		System.out.println("------------------");
+
+		//错误调用
+		//new CarHeadHandler().setNextHandler(new CarBodyHandler()).setNextHandler(new CarTailHandler()).HandlerCar();
+
 	}
 }

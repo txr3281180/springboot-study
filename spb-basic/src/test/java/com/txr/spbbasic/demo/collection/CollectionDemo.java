@@ -2,8 +2,12 @@ package com.txr.spbbasic.demo.collection;
 
 import org.junit.Test;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -23,7 +27,25 @@ public class CollectionDemo {
 
     /** 原生文件属性获取 */
     @Test
-    public void testProperty() {
+    public void testProperty() throws FileNotFoundException {
+
+        String paths = Paths.get(System.getProperty("user.dir"),"src", "main", "resources", "META-INF", "spring.factories").toString();
+        System.out.println(paths);
+
+        File file = new File(paths);
+        System.out.println(file.isFile());
+
+        InputStream ist = new FileInputStream(file);
+        Properties prop = new Properties();
+        try {
+            prop.load(ist);
+            String property = prop.getProperty("org.springframework.context.ApplicationContextInitializer");
+            System.out.println(property);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        //========================================================
         Properties properties = new Properties();
         InputStream is = CollectionDemo.class.getClassLoader().getResourceAsStream("application.properties");
         try {
