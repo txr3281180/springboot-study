@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -66,18 +69,25 @@ public class MainController {
 
     @ApiOperation(value = "债券编号列表", notes = "债券编号列表")
     @GetMapping("/bondKeys")
-    public ResponseData<List<String>> getAllBondKeys() {
+    public ResponseData<List<String>> getAllBondKeys(@ApiParam(value = "userId", required = true)
+                                                     @RequestHeader String userId) {   //请求头
         logger.info("Load all bond keys");
         List<String> allBondKeys = bondCacheService.getAllBondKeys();
         return ResponseUtil.ok(allBondKeys);
     }
 
     @ApiOperation(value = "债券详细信息", notes = "债券详细信息")
-    @GetMapping(value = "/{bondKey}/bondInfo")
-    public ResponseData<List<Bond>> getUserInfoByUserId(@ApiParam(value = "bondKey", required = true)
-                                                        @PathVariable String bondKey) throws BondNotFoundException {
+    @PostMapping(value = "/{userName}/bondInfo")
+    public ResponseData<List<Bond>> getUserInfoByUserId(@ApiParam(value = "userName", required = true)
+                                                        @PathVariable String userName,
+                                                        @ApiParam(value = "condtion", required = true)
+                                                        @RequestBody Bond bond) throws BondNotFoundException {
+        String bondKey = bond.getBondKey();
+        System.out.println(userName);
         logger.info("Find bond by bondKeys:" + bondKey);
         List<Bond> bonds = bondCacheService.findBondByBondKey(bondKey);
         return ResponseUtil.ok(bonds);
     }
+
+
 }

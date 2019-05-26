@@ -1,11 +1,15 @@
 package com.txr.spbbasicstarter;
 
+import com.txr.spbbasicstarter.condtional.LinuxConditional;
+import com.txr.spbbasicstarter.condtional.OsSelectBean;
+import com.txr.spbbasicstarter.condtional.WindowsConditional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.annotation.SchedulingConfiguration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 
 /**
  * Created by xinrui.tian on 2019/4/27.
@@ -24,4 +28,28 @@ public class TxrAutoConfigurationService {
         txrAutoConfigurerProcessor.setTxrAutoConfigurerProperties(txrAutoConfigurerProperties);
         return txrAutoConfigurerProcessor;
     }
+    //@Lazy
+    //@Scope  // singleton  | prototype | request | session
+    @Bean("windowsBean")
+    @Scope("prototype")
+    @Conditional({WindowsConditional.class})
+    public OsSelectBean windowsBean() {
+        OsSelectBean osSelectBean = new OsSelectBean();
+        osSelectBean.setWindows(true);
+        return osSelectBean;
+    }
+
+
+    //-Dos.name=linux
+
+    @Bean("linuxBean")
+    @Scope("prototype")
+    @Conditional({LinuxConditional.class})
+    public OsSelectBean linuxBean() {
+        OsSelectBean osSelectBean = new OsSelectBean();
+        osSelectBean.setWindows(false);
+        return osSelectBean;
+    }
+
+
 }
