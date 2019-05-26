@@ -8,6 +8,14 @@
       <list>
         <option value="$PROJECT_DIR$/spb-cache-redis/pom.xml" />
         <option value="$PROJECT_DIR$/spb-cache-ehcache/pom.xml" />
+        <option value="$PROJECT_DIR$/spb-basic-web/pom.xml" />
+        <option value="$PROJECT_DIR$/spb-basic/pom.xml" />
+        <option value="$PROJECT_DIR$/spb-basic-task/pom.xml" />
+        <option value="$PROJECT_DIR$/spb-cache-mapdb/pom.xml" />
+        <option value="$PROJECT_DIR$/spb-basic-starter/pom.xml" />
+        <option value="$PROJECT_DIR$/spb-data-mybatis/pom.xml" />
+        <option value="$PROJECT_DIR$/spb-mq-qpid/pom.xml" />
+        <option value="$PROJECT_DIR$/txr-common-utils/pom.xml" />
       </list>
     </option>
   </component>
