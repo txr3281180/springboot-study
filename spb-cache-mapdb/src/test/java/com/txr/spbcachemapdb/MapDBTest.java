@@ -4,6 +4,7 @@ package com.txr.spbcachemapdb;
 import org.junit.Test;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
+import org.mapdb.HTreeMap;
 import org.mapdb.Serializer;
 
 import java.io.File;
@@ -62,7 +63,9 @@ public class MapDBTest {
     @Test
     public void test3() {
         DB db = DBMaker.memoryDB().make();
-        db.hashMap("map")
+
+
+        HTreeMap map = db.hashMap("map")
                 .keySerializer(Serializer.STRING)
                 .valueSerializer(Serializer.JAVA)
                 //.counterEnable().valueLoader(s -> "")
@@ -85,7 +88,12 @@ public class MapDBTest {
     @Test
     public void testMemoryDb() {
         DB db = DBMaker.memoryDB().make();  //一个DB实例代表了一个打开的数据库（或单个事务会话）
+
+
         ConcurrentMap map = db.hashMap("map").createOrOpen();
+
+
+
         map.put("something", "here");
 
         for (Object o : map.keySet()) {
