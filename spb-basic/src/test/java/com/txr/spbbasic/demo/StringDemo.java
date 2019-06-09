@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class StringDemo {
 
@@ -138,8 +139,17 @@ public class StringDemo {
         String[] split4 = string.split("/"); //{}
         System.out.println(split4.length); // 0
         //System.out.println(split4[0] == null);
-    }
 
+        //================================================
+        String ab = "a,b";
+        String c = "c";
+
+        String collect1 = Arrays.stream(ab.split(",")).collect(Collectors.joining("_"));
+        String collect2 = Arrays.stream(c.split(",")).collect(Collectors.joining("_"));
+
+        System.out.println(collect1); //a_b
+        System.out.println(collect2); //c
+    }
 
     /**
      * 判断一个字符串是不是纯数字

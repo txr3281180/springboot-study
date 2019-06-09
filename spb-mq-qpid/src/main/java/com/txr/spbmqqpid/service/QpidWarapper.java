@@ -1,9 +1,10 @@
 package com.txr.spbmqqpid.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.qpid.QpidException;
 import org.apache.qpid.client.AMQAnyDestination;
 import org.apache.qpid.client.message.JMSMapMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import txr.common.exception.ExceptionStack;
@@ -28,9 +29,10 @@ import java.util.concurrent.Executors;
 /**
  * Created by xinrui.tian on 2019/5/18.
  */
-@Slf4j
 @Component
 public class QpidWarapper {
+
+    private final Logger log = LoggerFactory.getLogger(QpidWarapper.class);
 
     @Value("${qpid.url}")
     private String pqidUrl;

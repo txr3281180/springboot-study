@@ -278,4 +278,12 @@ public class BaseDemo {
         System.out.println(map);
 
     }
+
+    public void pairTest() {
+        //package javafx.util.Pair   //打包报错
+        //org.springframework.data.util.Pair;
+
+        //spring-data-commons
+    }
+
 }
