@@ -2,15 +2,22 @@ package com.txr.spbcachemapdb;
 
 
 import org.junit.Test;
+import org.mapdb.Atomic;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
+import org.mapdb.HTreeMap;
 import org.mapdb.Serializer;
 
 import java.io.File;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ConcurrentNavigableMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by xinrui.tian on 2019/4/24
@@ -28,9 +35,111 @@ public class MapDBTest {
         getDBFile("test");  //db名称
     }
 
+
+    @Test
+    public void testPath() {
+
+//        String s = new StringBuilder(System.getProperty("user.dir"))
+//                .append(File.separator).append("..")
+//                .append(File.separator).append("..")
+//                .append(File.separator).append("testapp")
+//                .append(File.separator).append("db").toString();
+
+        String servicePath = System.getProperty("user.dir");
+        String filePath = Paths.get(servicePath,"..", "..", "testapp", "db").toString();
+
+        //D:\MyProject\Work\SDN\cache_manager\..\..\testapp\db\version.db
+
+        System.out.println(filePath);
+
+        File file = new File(filePath);
+        if (!file.exists() && !file.isDirectory()) {
+            System.out.println("------------------");
+        } else {
+            String path = file.getPath();
+            System.out.println(path);
+
+            DB db = DBMaker.fileDB(path + File.separator + "test.db")
+                    .closeOnJvmShutdown()
+                    .fileMmapEnableIfSupported()
+                    .fileMmapPreclearDisable()
+                    .fileChannelEnable()
+                    .checksumHeaderBypass()
+                    .make();
+        }
+
+    }
+
     private String getDBFile(String dbName) {
         return new StringBuilder("db/").append(dbName).append(".db").toString();
     }
+
+    @Test
+    public void test1() {
+        DB db = DBMaker.fileDB(getDBFile("test1"))
+                .closeOnJvmShutdown()     //在JVM退出之前有一个自动关闭数据库的关闭钩子，但是如果JVM崩溃或被杀死，这将无法保护您的数据。使用DBMaker.closeOnJvmShutdown()选项启用它。
+                .fileMmapEnableIfSupported()
+                .fileMmapPreclearDisable()
+                .fileChannelEnable()
+                //.readOnly()  // 文件必须存在
+                .checksumHeaderBypass()
+                //.transactionEnable()  //开启事务 （WAL 提前事务。但是WAL速度较慢，必须在文件之间复制和同步数据。）
+                .make();
+
+       // .fileChannelEnable() /  .readOnly()  //只能用一个
+
+
+        Atomic.Long aa = db.atomicLong("aa").createOrOpen();
+
+        aa.incrementAndGet();
+
+        System.out.println(aa);
+        db.commit();
+
+        Atomic.Long bb = db.atomicLong("bb").createOrOpen();
+
+        bb.set(10);
+        db.commit();
+        System.out.println(bb);
+
+        db.close();
+    }
+
+
+    @Test
+    public void test4() {
+        DB db = DBMaker.fileDB(getDBFile("test4"))
+                .closeOnJvmShutdown()     //在JVM退出之前有一个自动关闭数据库的关闭钩子，但是如果JVM崩溃或被杀死，这将无法保护您的数据。使用DBMaker.closeOnJvmShutdown()选项启用它。
+                .fileMmapEnableIfSupported()
+                .fileMmapPreclearDisable()
+                .checksumHeaderBypass()
+                .transactionEnable()  //开启事务 （WAL 提前事务。但是WAL速度较慢，必须在文件之间复制和同步数据。）
+                .make();
+
+        ConcurrentMap map = db.hashMap("map")
+                .keySerializer(Serializer.STRING)
+                .valueSerializer(Serializer.JAVA)
+                .counterEnable().valueLoader(s -> "")
+                .createOrOpen();
+
+        Map<String, String> mapR = new HashMap<>();
+        mapR.put("a", "A");
+        map.put("abc", mapR);
+        db.commit();
+
+        Map<String, String> mapZ = (Map<String, String>)map.get("abc");
+        System.out.println(mapZ);
+        mapZ.put("b", "B");
+
+        db.commit();
+
+        Map<String, String> mapX = (Map<String, String>)map.get("abc");
+        System.out.println(mapX);
+
+    }
+
+
+
 
     @Test
     public void test2() {

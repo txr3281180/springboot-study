@@ -7,8 +7,19 @@ import java.math.RoundingMode;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BaseDemo {
@@ -154,7 +165,10 @@ public class BaseDemo {
         System.out.println(ai);
 
 
+        ai.incrementAndGet();
         ai.set(0);
+
+        System.out.println(ai.get());
 
         System.out.println(ai);
     }
@@ -174,5 +188,94 @@ public class BaseDemo {
             System.out.println("finally");
             return i;
         }
+    }
+
+    @Test
+    public void testMapRemove() {
+        Map<String ,String> map = new HashMap<>();
+        map.put("a", "a");
+        map.put("b", "b");
+        map.put("c", "c");
+        map.put("d", "d");
+        System.out.println(map);
+
+        Set<String> set = new HashSet<>();
+        set.add("a");
+        set.add("b");
+
+        map.remove(set);  //不能移除
+        System.out.println(map);
+
+        set.forEach(x -> map.remove(x));
+        System.out.println(map);
+    }
+
+    @Test
+    public void testFuture() {
+
+        //运行在容器中 当前线程结束， Future 线程会继续执行
+
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            list.add(i + "");
+        }
+
+        Future<String> f = futureTask(list);
+
+        System.out.println(list);
+
+        try {
+            //此处get()方法阻塞main线程
+            System.out.println(f.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Future<String> futureTask(List<String> list) {
+        ExecutorService executor = Executors.newFixedThreadPool(1);
+        Future<String> f = executor.submit(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                for (String s : list) {
+                    Thread.sleep(2000);
+                    System.out.println(s);
+                }
+                return "aaa";
+            }
+        });
+
+        return f;
+    }
+
+    @Test
+    public void test121() {
+        Map<String, Map<String, String>> map = new HashMap<>();
+        Map<String ,String> map2 = new HashMap<>();
+        map2.put("a", "A");
+
+        map.put("1", map2);
+
+        System.out.println(map);
+
+        Map<String, String> stringStringMap = map.get("1");  //引用变量
+        stringStringMap.put("d", "D");
+        System.out.println(map);
+
+
+        Object o = map.get("1");
+        Map<String, String> map3 = (Map<String, String>)o;
+        map3.put("b", "B");
+        System.out.println(map);
+
+
+        Map<String, String> mapTem = new HashMap<>();
+        mapTem.put("aa", "AA");
+        Map<String, String> orDefault = map.getOrDefault("2", new HashMap<>());
+        orDefault.putAll(mapTem); //key 不存在放不进去
+        System.out.println(map);
+
     }
 }
