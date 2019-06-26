@@ -286,4 +286,13 @@ public class BaseDemo {
         //spring-data-commons
     }
 
+    @Test
+    public void testEv() {
+        Map<String, String> getenv = System.getenv();
+        System.out.println(getenv);
+
+        String ios = getenv.get("OS");
+        System.out.println(ios);
+    }
+
 }

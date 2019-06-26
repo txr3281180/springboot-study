@@ -6,7 +6,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.core.env.AbstractEnvironment;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -33,4 +36,37 @@ public class SpbBasicApplicationTests {
         OsSelectBean osSelectBean = windowsBean != null ? windowsBean:linuxBean;
         osSelectBean.printlnOs();
     }
+
+
+    @Autowired
+    AbstractEnvironment environment;
+
+    @Test
+    public void testEv() {
+
+        String[] activeProfiles = environment.getActiveProfiles();
+        for (String activeProfile : activeProfiles) {
+            System.out.println(activeProfile);
+        }
+
+        String[] defaultProfiles = environment.getDefaultProfiles();
+        for (String defaultProfile : defaultProfiles) {
+            System.out.println(defaultProfile);
+        }
+
+        System.out.println("========================");
+        Map<String, Object> systemEnvironment = environment.getSystemEnvironment();
+        for (String s : systemEnvironment.keySet()) {
+            System.out.println(s + "=======>" + systemEnvironment.get(s));
+        }
+
+        System.out.println("========================");
+        Map<String, Object> systemProperties = environment.getSystemProperties();
+        for (String s : systemProperties.keySet()) {
+            System.out.println(s + "======>" + systemProperties.get(s));
+        }
+
+
+    }
+
 }
