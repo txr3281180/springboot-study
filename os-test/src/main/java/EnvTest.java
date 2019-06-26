@@ -3,7 +3,7 @@ import java.util.Map;
 /**
  * Created by xinrui.tian on 2019/6/17
  */
-public class MainTest {
+public class EnvTest {
 
 
     /*
