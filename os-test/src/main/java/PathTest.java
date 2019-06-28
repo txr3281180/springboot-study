@@ -18,14 +18,16 @@ public class PathTest {
 
         System.out.println(File.separator);
 
+
+        //File,Path, System.getProperty 自动根据系统使用分正确的隔符
+
         /*
         * windows:
         * D:\MyProject\My\springboot-study\os-test
         * D:\MyProject\My\springboot-study\os-test
         * \
         */
-
-         /*
+        /*
         * linux:
         * /opt/sumscope/xinrui.tian
         * /opt/sumscope/xinrui.tian

@@ -24,6 +24,7 @@ public class SpbCacheMapdbApplicationTests {
     public void contextLoads() {
     }
 
+    /** 测试 web 路径与 java程序路径 使用相对路径 */
     @Test
     public void testPath() throws FileNotFoundException {
 

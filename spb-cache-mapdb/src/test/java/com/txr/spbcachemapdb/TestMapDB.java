@@ -1,11 +1,13 @@
 package com.txr.spbcachemapdb;
 
 
+import com.txr.spbcachemapdb.utils.MapDbUtils;
 import com.txr.spbcachemapdb.utils.PathUtils;
 import org.junit.Test;
 import org.mapdb.Atomic;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
+import org.mapdb.HTreeMap;
 import org.mapdb.Serializer;
 
 import java.io.File;
@@ -19,7 +21,7 @@ import java.util.concurrent.ConcurrentNavigableMap;
 /**
  * Created by xinrui.tian on 2019/4/24
  */
-public class MapDBTest {
+public class TestMapDB {
 
     @Test
     public void test() {
@@ -28,7 +30,24 @@ public class MapDBTest {
         getDBFile("test");  //db名称
     }
 
+    /** 测试 File PATH  */
+    @Test
+    public void testPath3() {
 
+        //String path = "/opt/sumscope/cdh";
+        String path = "\\opt\\sumscope/cdh";
+
+        File file = new File(path);
+        if (!file.exists() && !file.isDirectory()) {
+            //file.mkdir();
+        }
+
+        System.out.println(file);
+
+        System.out.println(file.toPath());
+    }
+
+    /** 测试 web 路径与 java程序路径 使用相对路径 */
     @Test
     public void testPath() {
 
@@ -63,6 +82,7 @@ public class MapDBTest {
 
     }
 
+    /** 测试 File PATH 根据系统自动转换路径分隔符  */
     @Test
     public void testPath2() {
 
@@ -70,17 +90,27 @@ public class MapDBTest {
 
         //File[] files = f.listFiles();
         Path path = f.toPath();
-
-
         System.out.println(path);
 
 
+
+        File f2 = new File("D:/MyProject/My/springboot-study/spb-cache-mapdb/src/main/java/com/txr/spbcachemapdb/utils/PathUtils.java");
+        Path path2 = f2.toPath();
+        System.out.println(path2);
+
+
+        String str = "d:/abc";
+        String str2 = "d:\\abc";
+
+        File file = new File(str2);
+        System.out.println(file.toPath());
     }
 
     private String getDBFile(String dbName) {
         return new StringBuilder("db/").append(dbName).append(".db").toString();
     }
 
+    /** Atomic */
     @Test
     public void test1() {
         DB db = DBMaker.fileDB(getDBFile("test1"))
@@ -110,7 +140,7 @@ public class MapDBTest {
         db.close();
     }
 
-
+    /** 测试强转后是否为引用赋值：结论否 */
     @Test
     public void test4() {
         DB db = DBMaker.fileDB(getDBFile("test4"))
@@ -143,21 +173,22 @@ public class MapDBTest {
 
     }
 
+
     @Test
-    public void testMemoryDb() {
-        DB db = DBMaker.memoryDB().make();  //一个DB实例代表了一个打开的数据库（或单个事务会话）
+    public void test5() {
+        PathUtils.createFolderInPorject("/db");
 
+        DB db = MapDbUtils.mapDbUtils().fileDB(getDBFile("test"));
 
-        ConcurrentMap map = db.hashMap("map").createOrOpen();
+        HTreeMap<String, String> map = MapDbUtils.mapDbUtils().hashMap(db).createOrOpen();
 
+        map.put("1", "abc");
+        map.put("2", "efc");
 
+        db.commit();
 
-        map.put("something", "here");
+        System.out.println(map.get("3"));
 
-        for (Object o : map.keySet()) {
-            System.out.println(o);
-            System.out.println(map.get(o));
-        }
     }
 
     /** read only */
@@ -175,7 +206,7 @@ public class MapDBTest {
         Object something = map2.get("something");
         System.out.println(something);
 
-        map2.put("aaa", "bbbb");  //拒绝访问
+        map2.put("aaa", "bbbb");
 
     }
 
