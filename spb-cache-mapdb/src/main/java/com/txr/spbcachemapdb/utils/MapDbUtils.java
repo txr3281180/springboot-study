@@ -67,10 +67,11 @@ public class MapDbUtils {
         //.allocateIncrement(512 * 1024*1024)       // 512MB
 
         //.readOnly() // 使用写操作会 拒绝访问
-        DB fileDB = DBMaker.fileDB("db/test.db").fileChannelEnable()
+        DB fileDB = DBMaker.fileDB("db/test.db")
+                .fileChannelEnable()
                 .closeOnJvmShutdown()
                 //.fileMmapEnableIfSupported()
-                .transactionEnable()
+                .fileMmapEnable()
                 .cleanerHackEnable()
                 .fileMmapPreclearDisable()
                 .allocateStartSize(10 * 1024*1024*1024)
