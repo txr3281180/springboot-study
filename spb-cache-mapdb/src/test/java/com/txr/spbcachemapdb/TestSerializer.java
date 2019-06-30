@@ -3,31 +3,234 @@ package com.txr.spbcachemapdb;
 import com.alibaba.fastjson.JSON;
 import com.txr.spbcachemapdb.utils.MapDbUtils;
 import com.txr.spbcachemapdb.utils.PathUtils;
+import kotlin.Pair;
 import org.junit.Test;
 import org.mapdb.BTreeMap;
 import org.mapdb.DB;
+import org.mapdb.DBMaker;
 import org.mapdb.HTreeMap;
 import org.mapdb.Serializer;
-
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Created by xinrui.tian on 2019/6/26
  */
 public class TestSerializer {
 
+    //sink
+    @Test
+    public void test5() {
+
+        long start = System.currentTimeMillis();
+        PathUtils.createFolderInProject("/db");
+
+        DB db =DBMaker.fileDB(getDBFile("bond"))
+                .fileChannelEnable()
+                .closeOnJvmShutdown()
+                .fileMmapEnable()
+                //.transactionEnable()
+                .cleanerHackEnable()
+                .allocateStartSize(10 * 1024*1024*1024)  // 10GB
+                .allocateIncrement(512 * 1024*1024)       // 512MB
+                .fileMmapPreclearDisable()
+                .make();
+
+        long end = System.currentTimeMillis();
+        System.out.println("create db :" + (end -start));
+
+        List<Pair<String, String>> list = new ArrayList<>();
+        long start3 = System.currentTimeMillis();
+        int count = 1;
+        for (int i = 0; i < 10000; i++) {
+            List<Bond> allBond = getAllBond();
+            int len = allBond.size();
+            for (int j = 0; j < len; j++) {
+                Pair<String, String> pair = new Pair<>(count + "", JSON.toJSONString(allBond.get(j)));
+                list.add(pair);
+                count ++;
+            }
+        }
+
+        long end3 = System.currentTimeMillis();
+        System.out.println("put data:" + (end3 - start3));
+
+
+        long start4 = System.currentTimeMillis();
+        Iterator iterator = list.iterator();
+        //HTreeMap<String, String> bond = db
+        BTreeMap<Integer, String> bond = db
+                //.hashMap("bond")
+                .treeMap("bond")
+                .counterEnable()
+                .keySerializer(Serializer.INTEGER).valueSerializer(Serializer.STRING).createFrom(iterator);
+
+        //db.commit();
+        long end4 = System.currentTimeMillis();
+        System.out.println("crete map:" + (end4 - start4));
+
+        long start5 = System.currentTimeMillis();
+        //String s1 = bond.get("19999");
+        System.out.println(bond.get("19999"));
+        long end5 = System.currentTimeMillis();
+        System.out.println("get data:" + (end5 - start5));
+
+    }
+
+
+    //sink
+    @Test
+    public void test4() {
+
+        long start = System.currentTimeMillis();
+        PathUtils.createFolderInProject("/db");
+
+        DB db =DBMaker.fileDB(getDBFile("bond"))
+                .fileChannelEnable()
+                .closeOnJvmShutdown()
+
+                .fileMmapEnable()
+                //.transactionEnable()
+                .cleanerHackEnable()
+                .allocateStartSize(10 * 1024*1024*1024)  // 10GB
+                .allocateIncrement(512 * 1024*1024)       // 512MB
+                .fileMmapPreclearDisable()
+                .make();
+
+        long end = System.currentTimeMillis();
+        System.out.println("create db :" + (end -start));
+
+        long start1 = System.currentTimeMillis();
+        //HTreeMap<String, String> bond = db
+        DB.TreeMapSink<Integer, String> bond = db
+                //.hashMap("bond")
+                .treeMap("bond")
+                .counterEnable()
+                .keySerializer(Serializer.INTEGER).valueSerializer(Serializer.STRING).createFromSink();
+        long end1 = System.currentTimeMillis();
+        System.out.println("create map:" + (end1 - start1));
+
+        long start3 = System.currentTimeMillis();
+        int count = 1;
+        for (int i = 0; i < 10000; i++) {
+            List<Bond> allBond = getAllBond();
+            int len = allBond.size();
+            for (int j = 0; j < len; j++) {
+                bond.put(count, JSON.toJSONString(allBond.get(j)));
+                count ++;
+            }
+        }
+
+        BTreeMap<Integer, String> sink = bond.create();
+        long end3 = System.currentTimeMillis();
+        System.out.println("put data:" + (end3 - start3));
+
+
+        long start4 = System.currentTimeMillis();
+        db.commit();
+        long end4 = System.currentTimeMillis();
+        System.out.println("put data commit:" + (end4 - start4));
+
+
+        long start5 = System.currentTimeMillis();
+        //String s1 = bond.get("19999");
+        System.out.println(sink.get(19999));
+        long end5 = System.currentTimeMillis();
+        System.out.println("get data:" + (end5 - start5));
+
+    }
+
 
     @Test
     public void test1() {
 
+        long start = System.currentTimeMillis();
+        PathUtils.createFolderInProject("/db");
+        //DB db = MapDbUtils.mapDbUtils().fileDB(getDBFile("bond"));
+
+        DB db =DBMaker.fileDB(getDBFile("bond"))
+                .fileChannelEnable()
+                .closeOnJvmShutdown()
+                //.fileMmapEnableIfSupported()
+
+                .fileMmapEnable()
+                //.transactionEnable()
+                .cleanerHackEnable()
+                .allocateStartSize(10 * 1024*1024*1024)  // 10GB
+                .allocateIncrement(512 * 1024*1024)       // 512MB
+                .fileMmapPreclearDisable()
+                .make();
+
+        //DB db = DBMaker.memoryDB().make();
+        //DB db = DBMaker.memoryDirectDB().make();
+        //DB db = DBMaker.heapDB().make();
+
+        long end = System.currentTimeMillis();
+        System.out.println("create db :" + (end -start));
+
+        long start1 = System.currentTimeMillis();
+        //HTreeMap<String, String> bond = db
+        BTreeMap<String, String> bond = db
+                //.hashMap("bond")
+                .treeMap("bond")
+                .counterEnable()
+                .keySerializer(Serializer.STRING).valueSerializer(Serializer.STRING).createOrOpen();
+        long end1 = System.currentTimeMillis();
+        System.out.println("create map:" + (end1 - start1));
 
 
+        long start2 = System.currentTimeMillis();
+        bond.clear();
+        long end2 = System.currentTimeMillis();
+        System.out.println("clear data:" + (end2 - start2));
+
+        long s = System.currentTimeMillis();
+        db.commit();
+        long e = System.currentTimeMillis();
+        System.out.println("clear data commit:" + (e - s));
+
+        long start3 = System.currentTimeMillis();
+        int count = 1;
+
+//        Map<String, String> map = new HashMap<>(20000);
+//        for (int i = 0; i < 3000; i++) {
+//            List<Bond> allBond = getAllBond();
+//            for (int j = 0; j < allBond.size(); j++) {
+//                map.put(count + "", JSON.toJSONString(allBond.get(j)));
+//                count ++;
+//            }
+//        }
+//        bond.putAll(map);
+
+        for (int i = 0; i < 10000; i++) {
+            List<Bond> allBond = getAllBond();
+            int len = allBond.size();
+            for (int j = 0; j < len; j++) {
+                bond.put(count + "", JSON.toJSONString(allBond.get(j)));
+                count ++;
+            }
+        }
+
+        long end3 = System.currentTimeMillis();
+        System.out.println("put data:" + (end3 - start3));
+
+
+        long start4 = System.currentTimeMillis();
+        db.commit();
+        long end4 = System.currentTimeMillis();
+        System.out.println("put data commit:" + (end4 - start4));
+
+
+        long start5 = System.currentTimeMillis();
+        //String s1 = bond.get("19999");
+        System.out.println(bond.get("19999"));
+        long end5 = System.currentTimeMillis();
+        System.out.println("get data:" + (end5 - start5));
 
     }
 
@@ -60,7 +263,7 @@ public class TestSerializer {
             }
         }
 
-        PathUtils.createFolderInPorject("/db");
+        PathUtils.createFolderInProject("/db");
 
         DB db = MapDbUtils.mapDbUtils().fileDB(getDBFile("bond"));
 
@@ -162,7 +365,7 @@ public class TestSerializer {
     public void testJavaSerializer2() {
         long start3 = System.currentTimeMillis();
 
-        PathUtils.createFolderInPorject("/db");
+        PathUtils.createFolderInProject("/db");
 
         DB db = MapDbUtils.mapDbUtils().fileDB(getDBFile("bond"));
 

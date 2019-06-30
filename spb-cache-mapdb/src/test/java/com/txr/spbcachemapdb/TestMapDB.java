@@ -26,7 +26,7 @@ public class TestMapDB {
     @Test
     public void test() {
         //主项目下创建路径
-        PathUtils.createFolderInPorject("/db");
+        PathUtils.createFolderInProject("/db");
         getDBFile("test");  //db名称
     }
 
@@ -176,7 +176,7 @@ public class TestMapDB {
 
     @Test
     public void test5() {
-        PathUtils.createFolderInPorject("/db");
+        PathUtils.createFolderInProject("/db");
 
         DB db = MapDbUtils.mapDbUtils().fileDB(getDBFile("test"));
 

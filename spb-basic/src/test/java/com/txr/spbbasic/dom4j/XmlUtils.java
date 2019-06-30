@@ -81,7 +81,7 @@ public class XmlUtils {
         XMLWriter xmlWriter = null;
 
         try{
-            xmlWriter = new XMLWriter(new FileOutputStream("clientcfg1.xml"), format);
+            xmlWriter = new XMLWriter(new FileOutputStream("clientcfg.xml"), format);
             xmlWriter.write(document);
         }catch (Exception e){
             e.printStackTrace();
