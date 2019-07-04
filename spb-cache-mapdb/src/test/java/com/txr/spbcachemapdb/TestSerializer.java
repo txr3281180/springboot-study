@@ -157,7 +157,6 @@ public class TestSerializer {
                 .fileChannelEnable()
                 .closeOnJvmShutdown()
                 //.fileMmapEnableIfSupported()
-
                 .fileMmapEnable()
                 //.transactionEnable()
                 .cleanerHackEnable()
