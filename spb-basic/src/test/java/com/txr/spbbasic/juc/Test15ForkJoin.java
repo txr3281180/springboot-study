@@ -1,4 +1,4 @@
-package com.txr.spbbasic.demo;
+package com.txr.spbbasic.juc;
 
 import org.junit.Test;
 
@@ -10,7 +10,7 @@ import java.util.stream.LongStream;
 /**
  * Created by xinrui.tian on 2018/9/27.
  */
-public class ForkJoinDemo{
+public class Test15ForkJoin {
 
     /**
      * 普通计算求和
