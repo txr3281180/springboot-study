@@ -1,13 +1,16 @@
 package com.txr.spbcachemapdb;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.txr.spbcachemapdb.utils.PathUtils;
 import kotlin.Pair;
 import org.junit.Test;
 import org.mapdb.BTreeMap;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
+import org.mapdb.HTreeMap;
 import org.mapdb.Serializer;
+import org.mapdb.Store;
 
 import java.io.Serializable;
 import java.util.*;
@@ -16,6 +19,117 @@ import java.util.*;
  * Created by xinrui.tian on 2019/7/2
  */
 public class TestFileToMemory {
+
+    @Test
+    public void test1() {
+        PathUtils.createFolderInProject("/db");
+
+        DB db = DBMaker.fileDB(getDBFile("bond"))
+                .fileChannelEnable()
+                .closeOnJvmShutdown()
+                .fileMmapEnable()
+                //.transactionEnable()
+                .cleanerHackEnable()
+                .allocateStartSize(10 * 1024*1024*1024)  // 10GB
+                .allocateIncrement(512 * 1024*1024)       // 512MB
+                .fileMmapPreclearDisable()
+                .make();
+
+
+       /* Map<String,String> map = new HashMap<>(20000);
+        int pageNo = 1;
+        int count = 1;
+        for (int i = 0; i < 10000; i++) {
+            List<Bond> allBond = getAllBond();
+            int len = allBond.size();
+            for (int j = 0; j < len; j++) {
+
+                if (map.size() == 20000) {
+                    HTreeMap<String, String> bond = db
+                            .hashMap(String.valueOf(pageNo))
+                            .counterEnable()
+                            .keySerializer(Serializer.STRING).valueSerializer(Serializer.STRING).createOrOpen();
+                    bond.putAll(map);
+                    db.commit();
+                    ++pageNo;
+                    map.clear();
+                }
+
+                map.put(count + "", JSON.toJSONString(allBond.get(j)));
+                count ++;
+            }
+
+        }
+
+        if (!map.isEmpty()) {
+            HTreeMap<String, String> bond = db
+                .hashMap(String.valueOf(pageNo))
+                .counterEnable()
+                .keySerializer(Serializer.STRING).valueSerializer(Serializer.STRING).createOrOpen();
+            bond.putAll(map);
+            db.commit();
+            ++pageNo;
+            map.clear();
+        }
+
+*/
+        long start = System.currentTimeMillis();
+        Iterable<String> allNames = db.getAllNames();
+        Iterator<String> iterator = allNames.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("========》1 :" + (end -start));
+
+
+        //Spliterator接口是1.8新加的接口，字面意思可分割的迭代器
+        Spliterator<String> spliterator = allNames.spliterator();
+        System.out.println("estimateSize :" + spliterator.estimateSize());
+        System.out.println("characteristics :" + spliterator.characteristics());
+//        System.out.println("getComparator :" + spliterator.getComparator());
+        System.out.println("getExactSizeIfKnown :" + spliterator.getExactSizeIfKnown());
+
+        Spliterator<String> stringSpliterator = spliterator.trySplit();
+        System.out.println("trySplit :" + stringSpliterator);
+
+        /*如果有剩余的元素存在，执行参数给定的操作，并返回true，否则就返回false。
+            如果Spliterator对象具有ORDERED属性，那么tryAdvance也会按照相应的顺序去执行。*/
+        spliterator.tryAdvance((x) -> {
+            System.out.println(x);
+        });
+
+
+        long start1 = System.currentTimeMillis();
+        //获取所有分片  速度延时
+        Map<String, Object> all = db.getAll();
+
+        long end1 = System.currentTimeMillis();
+        System.out.println("========》2 :" + (end1-start1));
+
+
+
+        System.out.println(db.exists("11"));
+        System.out.println(db.exists("10"));
+
+
+
+        long start2 = System.currentTimeMillis();
+        Map<String, String> o = (Map<String, String>)db.get("10");
+
+        long end2 = System.currentTimeMillis();
+        System.out.println("========》3 :" + (end2 -start2));
+
+
+        String nameForObject = db.getNameForObject(JSONObject.class);
+
+
+        db.getAllNames().forEach(x -> System.out.println(x));
+
+        System.out.println("ddddd");
+
+
+    }
 
 
     @Test
