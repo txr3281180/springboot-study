@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 import txr.common.exception.ExceptionStack;
 import txr.common.string.NumberTools;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * Created by xinrui.tian on 2019/5/18.
  */
@@ -39,6 +42,14 @@ public class UtilTest {
         System.out.println(NumberTools.precisionTwoToFour("2.1000"));
         System.out.println(NumberTools.precisionZeroToFour("2.1000"));
         System.out.println(NumberTools.precisionZeroToTwo("2.1000"));
+    }
+
+    @Test
+    public void testDateTime() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String format = formatter.format(localDateTime);
+        System.out.println(format);
     }
 
 }

@@ -7,6 +7,8 @@ import java.math.RoundingMode;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -295,4 +297,14 @@ public class BaseDemo {
         System.out.println(ios);
     }
 
+
+    @Test
+    public void testFanXin() {
+        List list = new ArrayList<String>();
+        list.add("adfas");
+        list.add(11);
+
+        System.out.println(list);
+
+    }
 }

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.txr.spbcachemapdb.utils.PathUtils;
 import kotlin.Pair;
 import org.junit.Test;
+
 import org.mapdb.BTreeMap;
 import org.mapdb.DB;
 import org.mapdb.DBMaker;
@@ -134,21 +135,8 @@ public class TestFileToMemory {
 
     @Test
     public void test5() {
-        long start = System.currentTimeMillis();
         PathUtils.createFolderInProject("/db");
-
-        Map<String,String> map = new HashMap<>(200000);
-        int count = 1;
-        for (int i = 0; i < 10000; i++) {
-            List<Bond> allBond = getAllBond();
-            int len = allBond.size();
-            for (int j = 0; j < len; j++) {
-                map.put(count + "", JSON.toJSONString(allBond.get(j)));
-                count ++;
-            }
-        }
-
-        DB db = DBMaker.fileDB(getDBFile("bond"))
+        DB db = DBMaker.fileDB(getDBFile("bondStore"))
                 .fileChannelEnable()
                 .closeOnJvmShutdown()
                 .fileMmapEnable()
@@ -159,36 +147,40 @@ public class TestFileToMemory {
                 .fileMmapPreclearDisable()
                 .make();
 
-        long end = System.currentTimeMillis();
-        System.out.println("create db :" + (end -start));
+     /*   int count = 1;
+        for (int i = 0; i < 100; i++) {
+            Map<String,String> map = new HashMap<>(10000);
+            for (int j = 0; j < 500; j++) {
+                List<Bond> allBond = getAllBond();
+                int len = allBond.size();
+                for (int k = 0; k < len; k++) {
+                    map.put(count + "", JSON.toJSONString(allBond.get(k)));
+                    count ++;
+                }
+            }
 
-        int len = map.size();
-        System.out.println(len + "=================================================");
-
-        int pageSize = 10000;
-        int pageNo = 1;
-        for (int i = 1; i < len; i++) {
-            BTreeMap<Integer, String> bond = db
-                    .treeMap(String.valueOf(pageNo))
+            HTreeMap<String, String> bond = db
+                    .hashMap(String.valueOf((i + 1)))
                     .counterEnable()
-                    .keySerializer(Serializer.INTEGER).valueSerializer(Serializer.STRING).create();
+                    .keySerializer(Serializer.STRING).valueSerializer(Serializer.STRING).createOrOpen();
 
-
-
-        }
-
-
-        long start4 = System.currentTimeMillis();
-        //db.commit();
-        long end4 = System.currentTimeMillis();
-        System.out.println("crete map:" + (end4 - start4));
+            bond.putAll(map);
+            db.commit();
+        }*/
 
         long start5 = System.currentTimeMillis();
-        //String s1 = bond.get("19999");
-        //System.out.println(bond.get("19999"));
+        /*Object o = db.get("1");
+        Map<String, JSON> o1 = (Map<String, JSON>) o;*/
+
+
+        Iterable<String> allNames = db.getAllNames();
+        allNames.forEach(x -> System.out.println(x));
+
+
+        // JSON json = o1.get("1");
+       // System.out.println(json.toJSONString());
         long end5 = System.currentTimeMillis();
         System.out.println("get data:" + (end5 - start5));
-
     }
 
 
