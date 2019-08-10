@@ -5,13 +5,11 @@ import com.csvreader.CsvWriter;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.util.TestPropertyValues;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,9 +20,22 @@ public class CsvDemo {
     @Test
     public void testCsv() {
         String paths = Paths.get(System.getProperty("user.dir"),"src", "main", "resources", "fid.csv").toString();
-        Map<String, Integer> stringIntegerMap = loadFidsFromCsvFile(paths);
-        System.out.println(stringIntegerMap);
+        //Map<String, Integer> stringIntegerMap = loadFidsFromCsvFile(paths);
+        //System.out.println(stringIntegerMap);
+        updateCsv(paths);
     }
+
+    public void updateCsv(String csvFile) {
+        try {
+            CsvReader csvReader = new CsvReader(csvFile, ',', Charset.forName("utf-8"));
+            while (csvReader.readRecord()){
+                System.out.println(csvReader.getRawRecord());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 
     public Map<String, Integer> loadFidsFromCsvFile(String csvFile) {
@@ -56,6 +67,29 @@ public class CsvDemo {
             e.printStackTrace();
         }
     }
+
+    /**
+     *  追加解决中文乱码
+     * @param str
+     * @param f
+     */
+    public static void writeFileToCsv(List<String[]> str, File f) {
+        CsvWriter cwriter = null;
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream(f, true);
+            cwriter = new CsvWriter(fileOutputStream,',', Charset.forName("utf-8"));
+            for (String[] s : str) {
+                cwriter.writeRecord(s,false);
+            }
+        } catch (IOException e) {
+            //logger.error("Write csv error. file name {},  data {}",  f.getName(), str.toString());
+        } finally {
+            if (cwriter != null) {
+                cwriter.close();
+            }
+        }
+    }
+
 
     @Test
     public void writerTest() {
@@ -107,5 +141,7 @@ public class CsvDemo {
             System.out.println(" " + csvReader.get("年龄"));
         }
     }
+
+
 
 }

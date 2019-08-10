@@ -40,16 +40,16 @@ public class QueueStackTest {
         queue.add("2");
         queue.add("3");
         queue.add("4");  //1,2,3,4
-        // add 方法直接使用 offer
+        // add 方法 源码使用 offer
         queue.offer("5");
         queue.offer("6");
         System.out.println(queue);
 
         //获取队列中第一个元素，为空报错
-        String element = queue.element();  //AbstractQueue.element() 方法用的peek
+        String element = queue.element();  //AbstractQueue.element() 方法 底层源码用的peek
         System.out.println(element);
         //移除第一个
-        String remove = queue.remove(); //AbstractQueue.remove() 方法用的poll
+        String remove = queue.remove(); //AbstractQueue.remove() 方法 底层源码用的poll
         System.out.println(remove);
 
         System.out.println("======================================");
