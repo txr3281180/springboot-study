@@ -2,8 +2,8 @@ package com.txr.spbbasic.csv;
 
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.util.TestPropertyValues;
 
 import java.io.*;
 import java.nio.charset.Charset;
@@ -16,6 +16,8 @@ import java.util.Map;
  * Created by xinrui.tian on 2019/5/24
  */
 public class CsvDemo {
+
+
 
     @Test
     public void testCsv() {
@@ -90,15 +92,62 @@ public class CsvDemo {
         }
     }
 
-
     @Test
-    public void writerTest() {
+    public void testFile2() {
+        File f = new File("D:/lcfx_data/a.txt");
+        String fileName = "cdc_bond_valuation.csv";
+        if (f.exists() && f.isDirectory()) {
+            File[] files = f.listFiles();
+            recursiveFile(files, fileName);
+        }
+    }
 
-        String[] content = {"HAHA", "19", "男"};
-        writeFileToCsv(content, "D:/demo1.csv");
+    /**
+     *  递归逐层删除指定文件
+     */
+    private void recursiveFile(File[] files, String fileName) {
+        for (File file : files) {
+            if (file.isDirectory()) {
+                File[] files1 = file.listFiles();
+                recursiveFile(files1, fileName);
+            } else {
+                if (file.isFile() && file.getName().equals(fileName)) {
+                    file.delete();
+                    File parent = file.getParentFile();
+                    String[] list = parent.list();
+                    if(list == null || list.length == 0) {
+                        System.out.println(parent);
+                        try {
+                            FileUtils.deleteDirectory(parent);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        }
     }
 
 
+    /**
+     * 测试字段中有逗号的情况
+     */
+    @Test
+    public void writerTest() {
+        String[] content = {"HA,HA", "19", "男"};
+        // 写入时为改值添加双引号
+        writeFileToCsv(content, "D:/demo1.csv");
+        try {
+            CsvReader csvReader = new CsvReader("D:/demo1.csv", ',', Charset.forName("UTF-8"));
+            while (csvReader.readRecord()) {
+                System.out.print(csvReader.get(0) + " " +  csvReader.get(1) +  " " +  csvReader.get(2));
+                System.out.println();
+                System.out.println(csvReader.getRawRecord());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Test
     public void writer() throws IOException {
@@ -125,11 +174,11 @@ public class CsvDemo {
     public void read() throws IOException {
 
         // 第一参数：读取文件的路径 第二个参数：分隔符（不懂仔细查看引用百度百科的那段话） 第三个参数：字符集
-        CsvReader csvReader = new CsvReader("F:/demo.csv", ',', Charset.forName("UTF-8"));
+        CsvReader csvReader = new CsvReader("D:/demo1.csv", ',', Charset.forName("UTF-8"));
 
         // 如果你的文件没有表头，这行不用执行
         // 这行不要是为了从表头的下一行读，也就是过滤表头
-        csvReader.readHeaders();
+        boolean b = csvReader.readHeaders();
 
         // 读取每行的内容
         while (csvReader.readRecord()) {

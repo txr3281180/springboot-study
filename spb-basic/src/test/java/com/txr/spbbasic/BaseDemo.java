@@ -307,4 +307,29 @@ public class BaseDemo {
         System.out.println(list);
 
     }
+
+
+    @Test
+    public void testRemove(){
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.add("4");
+        list.add("5");
+
+        for (int i = 0; i < list.size();) {
+            System.out.println(list.get(i));
+            list.remove(i);
+        }
+
+//        int len = list.size();
+//        for (int i = 0; i < len; len--) {
+//            System.out.println(list.get(i));
+//            list.remove(i);
+//        }
+
+        System.out.println(list.size());
+    }
+
 }
