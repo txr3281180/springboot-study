@@ -2,12 +2,14 @@ package com.txr.spbbasic.csv;
 
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.util.TestPropertyValues;
 
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +20,36 @@ import java.util.Map;
 public class CsvDemo {
 
     @Test
+    public void testFile() {
+        //File f = new File("D:/a.txt");
+        //File f = new File("D:/a/a.txt");
+        //File f = new File("D:/a");
+        String fName = new StringBuilder("D:/lcfx_data").append("/").append("TFBONDHISTORY").append(".csv").toString();
+        File f = new File(fName);
+//        if (f.exists()) {
+//            f.delete();
+//        }
+
+        System.out.println("是否是存在"+ f.exists());
+        System.out.println("是否是文件"+ f.isFile());
+        System.out.println("是否是文件夹"+ f.isDirectory());
+
+//        if (f.exists() && f.isFile()) {
+//            f.delete();
+//        }
+
+        //f.deleteOnExit();  //当程序停止时才删除
+
+//        File f1 = new File("D:/a");
+//
+//        try {
+//            FileUtils.deleteDirectory(f1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    @Test
     public void testCsv() {
         String paths = Paths.get(System.getProperty("user.dir"),"src", "main", "resources", "fid.csv").toString();
         //Map<String, Integer> stringIntegerMap = loadFidsFromCsvFile(paths);
@@ -26,16 +58,37 @@ public class CsvDemo {
     }
 
     public void updateCsv(String csvFile) {
+        CsvWriter cwriter = null;
+        CsvReader csvReader = null;
         try {
-            CsvReader csvReader = new CsvReader(csvFile, ',', Charset.forName("utf-8"));
+            csvReader = new CsvReader(csvFile, ',', Charset.forName("utf-8"));
+            List<String []> list = new ArrayList<>();
             while (csvReader.readRecord()){
-                System.out.println(csvReader.getRawRecord());
+                //System.out.println(csvReader.getRawRecord());
+                if (!csvReader.get(0).equals("3")) {
+                    String rawRecord = csvReader.getRawRecord();
+                    String[] split = rawRecord.split(",", -1);
+                    list.add(split);
+                }
             }
+            FileOutputStream fileOutputStream = new FileOutputStream(csvFile, false);
+            cwriter = new CsvWriter(fileOutputStream,',', Charset.forName("utf-8"));
+            for (String[] s : list) {
+                cwriter.writeRecord(s,true);
+            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (cwriter != null) {
+                cwriter.close();
+            }
+            if (csvReader != null) {
+                csvReader.close();
+            }
         }
     }
-
 
 
     public Map<String, Integer> loadFidsFromCsvFile(String csvFile) {
@@ -90,16 +143,6 @@ public class CsvDemo {
         }
     }
 
-
-    @Test
-    public void writerTest() {
-
-        String[] content = {"HAHA", "19", "男"};
-        writeFileToCsv(content, "D:/demo1.csv");
-    }
-
-
-
     @Test
     public void writer() throws IOException {
 
@@ -113,7 +156,7 @@ public class CsvDemo {
 
         // 写表头和内容，因为csv文件中区分没有那么明确，所以都使用同一函数，写成功就行
         // csvWriter.writeRecord(headers);
-        csvWriter.writeRecord(content);
+        csvWriter.writeRecord(content, true);  // true 换行
         //csvWriter.writeComment("aaaaa");
 
         // 关闭csvWriter
