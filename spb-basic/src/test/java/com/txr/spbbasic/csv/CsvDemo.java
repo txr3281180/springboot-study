@@ -1,5 +1,7 @@
 package com.txr.spbbasic.csv;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
@@ -134,19 +136,41 @@ public class CsvDemo {
      */
     @Test
     public void writerTest() {
-        String[] content = {"HA,HA", "19", "男"};
+//        String[] content = new String[3];
+//        String a = "Ha,Ha";
+//        String b = "19";
+//        String c = "男";
+//        content[0] = a;
+//        content[1] = b;
+//        content[2] = c;
+//        writeFileToCsv(content, "D:/demo1.csv");
+
+        JSONObject line = new JSONObject();
+        line.put("名称", "Ha,Ha");
+        line.put("年龄", "19");
+        line.put("名称2", "Ha,Ha");
+        line.put("性别", "男");
+
+        String [] str = new String[4];
+        str[0] = line.getString("名称");
+        str[1] = line.getString("年龄");
+        str[2] = line.getString("名称2");
+        str[3] = line.getString("性别");
+
+        writeFileToCsv(str, "D:/demo1.csv");
+
         // 写入时为改值添加双引号
-        writeFileToCsv(content, "D:/demo1.csv");
-        try {
-            CsvReader csvReader = new CsvReader("D:/demo1.csv", ',', Charset.forName("UTF-8"));
-            while (csvReader.readRecord()) {
-                System.out.print(csvReader.get(0) + " " +  csvReader.get(1) +  " " +  csvReader.get(2));
-                System.out.println();
-                System.out.println(csvReader.getRawRecord());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+//        try {
+////            CsvReader csvReader = new CsvReader("D:/demo1.csv", ',', Charset.forName("UTF-8"));
+////            while (csvReader.readRecord()) {
+////                System.out.print(csvReader.get(0) + " " +  csvReader.get(1) +  " " +  csvReader.get(2));
+////                System.out.println();
+////                System.out.println(csvReader.getRawRecord());
+////            }
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////        }
     }
 
     @Test
@@ -167,7 +191,6 @@ public class CsvDemo {
 
         // 关闭csvWriter
         csvWriter.close();
-
     }
 
     @Test

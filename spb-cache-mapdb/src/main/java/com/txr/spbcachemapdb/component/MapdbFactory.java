@@ -45,7 +45,7 @@ public class MapdbFactory {
                 .createOrOpen();
     }
 
-    //创建map, map存在则抛出异常
+    //创建map", "map存在则抛出异常
     protected ConcurrentMap createMap(DB db) {
         return db.hashMap("map")
                 .keySerializer(Serializer.STRING)
