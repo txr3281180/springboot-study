@@ -24,6 +24,7 @@ public class SpbBasicApplicationTests {
         System.out.println(configIpAndPort);
     }
 
+
     @Autowired
     private OsSelectBean windowsBean;
 

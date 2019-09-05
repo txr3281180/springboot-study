@@ -1,6 +1,5 @@
 package com.txr.spbbasic.csv;
 
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.csvreader.CsvReader;
 import com.csvreader.CsvWriter;
@@ -10,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +22,36 @@ public class CsvDemo {
 
 
     @Test
+    public void testFile() {
+        //File f = new File("D:/a.txt");
+        //File f = new File("D:/a/a.txt");
+        //File f = new File("D:/a");
+        String fName = new StringBuilder("D:/lcfx_data").append("/").append("TFBONDHISTORY").append(".csv").toString();
+        File f = new File(fName);
+//        if (f.exists()) {
+//            f.delete();
+//        }
+
+        System.out.println("是否是存在"+ f.exists());
+        System.out.println("是否是文件"+ f.isFile());
+        System.out.println("是否是文件夹"+ f.isDirectory());
+
+//        if (f.exists() && f.isFile()) {
+//            f.delete();
+//        }
+
+        //f.deleteOnExit();  //当程序停止时才删除
+
+//        File f1 = new File("D:/a");
+//
+//        try {
+//            FileUtils.deleteDirectory(f1);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+    }
+
+    @Test
     public void testCsv() {
         String paths = Paths.get(System.getProperty("user.dir"),"src", "main", "resources", "fid.csv").toString();
         //Map<String, Integer> stringIntegerMap = loadFidsFromCsvFile(paths);
@@ -30,16 +60,37 @@ public class CsvDemo {
     }
 
     public void updateCsv(String csvFile) {
+        CsvWriter cwriter = null;
+        CsvReader csvReader = null;
         try {
-            CsvReader csvReader = new CsvReader(csvFile, ',', Charset.forName("utf-8"));
+            csvReader = new CsvReader(csvFile, ',', Charset.forName("utf-8"));
+            List<String []> list = new ArrayList<>();
             while (csvReader.readRecord()){
-                System.out.println(csvReader.getRawRecord());
+                //System.out.println(csvReader.getRawRecord());
+                if (!csvReader.get(0).equals("3")) {
+                    String rawRecord = csvReader.getRawRecord();
+                    String[] split = rawRecord.split(",", -1);
+                    list.add(split);
+                }
             }
+            FileOutputStream fileOutputStream = new FileOutputStream(csvFile, false);
+            cwriter = new CsvWriter(fileOutputStream,',', Charset.forName("utf-8"));
+            for (String[] s : list) {
+                cwriter.writeRecord(s,true);
+            }
+
+
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (cwriter != null) {
+                cwriter.close();
+            }
+            if (csvReader != null) {
+                csvReader.close();
+            }
         }
     }
-
 
 
     public Map<String, Integer> loadFidsFromCsvFile(String csvFile) {
@@ -57,15 +108,95 @@ public class CsvDemo {
         return null;
     }
 
-    /****
+    /** 从文件中删除内容 */
+    @Test
+    public void testDeleteDataFromFile() {
+        File f = new File("d:/macro_base_index_values.csv");
+        //delFormCsv(f, 7, "2012-03-27");
+        try {
+            delFormCsv2(f, 7, "2012-04-24");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void delFormCsv2(File f, int index, String val) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(f));
+
+        BufferedWriter bw = new BufferedWriter(new FileWriter("temp.csv"));
+        String str;
+        while((str = br.readLine()) != null){
+            CsvReader csvReader = new CsvReader(str);
+            if (!csvReader.get(index).contains(val)) {
+                bw.write(str);
+                bw.newLine(); //也可以直接bw.write(str+"\n");
+                bw.flush();
+            }
+        }
+    }
+
+
+    public static void delFormCsv(File f, int index, String val) {
+        CsvWriter cscWriter = null;
+        CsvReader csvReader = null;
+        FileInputStream fileInputStream = null;
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileInputStream = new FileInputStream(f);
+            csvReader = new CsvReader(fileInputStream, ',', Charset.forName("utf-8"));
+            List<String []> list = new ArrayList<>();
+            csvReader.getHeaders();
+            while (csvReader.readRecord()){
+                if (!csvReader.get(index).contains(val)) {
+                    String [] values = csvReader.getValues();
+                    list.add(values);
+                }
+            }
+
+            fileOutputStream = new FileOutputStream(f, false);
+            cscWriter = new CsvWriter(fileOutputStream,',', Charset.forName("utf-8"));
+            for (String[] s : list) {
+                cscWriter.writeRecord(s,true);
+            }
+        } catch (Exception e) {
+            System.out.println("Csv del error");
+        } finally {
+            if (cscWriter != null) {
+                cscWriter.close();
+            }
+            if (csvReader != null) {
+                csvReader.close();
+            }
+            if (fileInputStream != null) {
+                try {
+                    fileInputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fileOutputStream != null) {
+                try {
+                    fileOutputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
+
+
+    /**
      *  csv 追加
      */
     public void writeFileToCsv(String[] str, String file) {
         File f = new File(file);
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(f,true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(f,true)); // 是否追加
             CsvWriter cwriter = new CsvWriter(writer,',');
-            cwriter.writeRecord(str,false);
+            cwriter.writeRecord(str,false);  //是否写入后指针在下一行
+            //cwriter.write(str, false);  //写入单个
             cwriter.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -74,8 +205,6 @@ public class CsvDemo {
 
     /**
      *  追加解决中文乱码
-     * @param str
-     * @param f
      */
     public static void writeFileToCsv(List<String[]> str, File f) {
         CsvWriter cwriter = null;
@@ -171,6 +300,19 @@ public class CsvDemo {
 ////        } catch (IOException e) {
 ////            e.printStackTrace();
 ////        }
+        try {
+            CsvReader csvReader = new CsvReader("D:/demo1.csv", ',', Charset.forName("UTF-8"));
+            while (csvReader.readRecord()) {
+                System.out.print(csvReader.get(0) + " " +  csvReader.get(1) +  " " +  csvReader.get(2) + "\n");
+                System.out.println(csvReader.getRawRecord());  // 获取整行string
+
+                String[] values = csvReader.getValues();
+                writeFileToCsv(values, "D:/demo2.csv");
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Test
@@ -186,7 +328,7 @@ public class CsvDemo {
 
         // 写表头和内容，因为csv文件中区分没有那么明确，所以都使用同一函数，写成功就行
         // csvWriter.writeRecord(headers);
-        csvWriter.writeRecord(content);
+        csvWriter.writeRecord(content, true);  // true 换行
         //csvWriter.writeComment("aaaaa");
 
         // 关闭csvWriter
@@ -195,13 +337,14 @@ public class CsvDemo {
 
     @Test
     public void read() throws IOException {
-
         // 第一参数：读取文件的路径 第二个参数：分隔符（不懂仔细查看引用百度百科的那段话） 第三个参数：字符集
         CsvReader csvReader = new CsvReader("D:/demo1.csv", ',', Charset.forName("UTF-8"));
 
         // 如果你的文件没有表头，这行不用执行
         // 这行不要是为了从表头的下一行读，也就是过滤表头
         boolean b = csvReader.readHeaders();
+
+        //csvReader.getHeaders();
 
         // 读取每行的内容
         while (csvReader.readRecord()) {
@@ -214,6 +357,9 @@ public class CsvDemo {
         }
     }
 
+    @Test
+    public void read2() {
+        File f = new File("d:/ d")
 
-
+    }
 }
