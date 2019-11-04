@@ -16,6 +16,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Locale;
 import java.util.Set;
 
@@ -251,5 +252,35 @@ public class DateTimeAPI {
         LocalDate firstDay = now.minusDays(dayOfMonth - 1 );
         LocalDate lastDay = firstDay.plusDays(now.lengthOfMonth() - 1);
         System.out.println(firstDay  +  ":" + lastDay);
+    }
+
+
+    // 判断是否为改月最后一天
+    @Test
+    public void testData1() {
+
+        //方式一
+        LocalDate now = LocalDate.now();
+        LocalDate with = now.with(TemporalAdjusters.lastDayOfMonth());
+        //System.out.println(now);
+        //System.out.println(with);
+
+        if (now.equals(with)) {
+            System.out.println(now + "本月最后一天");
+        }
+
+
+        //方式二
+        LocalDate parse = LocalDate.parse("2019-11-30");
+        int dayOfMonth = parse.getDayOfMonth();
+        int monthLen = parse.lengthOfMonth();
+        System.out.println(dayOfMonth);
+        System.out.println(monthLen);
+
+        if (monthLen == dayOfMonth) {
+            System.out.println(parse + "本月最后一天");
+        }
+
+
     }
 }
