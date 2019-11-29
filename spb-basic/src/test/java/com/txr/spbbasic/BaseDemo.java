@@ -2,6 +2,9 @@ package com.txr.spbbasic;
 
 import org.junit.Test;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.InetAddress;
@@ -330,6 +333,29 @@ public class BaseDemo {
 //        }
 
         System.out.println(list.size());
+    }
+
+
+//    java eval 动态语言
+//    https://www.jianshu.com/p/ba33c52c5b43
+//    https://blog.csdn.net/qq_25255197/article/details/79072119
+    @Test
+    public void testEval(){
+        ScriptEngineManager manager = new ScriptEngineManager();
+//        ScriptEngine se = manager.getEngineByName("js");
+//        ScriptEngine se = manager.getEngineByName("JavaScript");
+        ScriptEngine se = manager.getEngineByName("pytho");
+
+        String str = "1 + 2";
+
+        try {
+            int result = (Integer)se.eval(str);
+            System.out.println(result);
+        } catch (ScriptException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 }
