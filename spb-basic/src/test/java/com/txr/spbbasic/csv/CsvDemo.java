@@ -203,6 +203,7 @@ public class CsvDemo {
         }
     }
 
+
     /**
      *  追加解决中文乱码
      */
@@ -286,7 +287,7 @@ public class CsvDemo {
         str[2] = line.getString("名称2");
         str[3] = line.getString("性别");
 
-        writeFileToCsv(str, "D:/demo1.csv");
+        writeFileToCsv(str, "e:/lcfx_data/demo1.csv");
 
         // 写入时为改值添加双引号
 
@@ -300,19 +301,19 @@ public class CsvDemo {
 ////        } catch (IOException e) {
 ////            e.printStackTrace();
 ////        }
-        try {
-            CsvReader csvReader = new CsvReader("D:/demo1.csv", ',', Charset.forName("UTF-8"));
-            while (csvReader.readRecord()) {
-                System.out.print(csvReader.get(0) + " " +  csvReader.get(1) +  " " +  csvReader.get(2) + "\n");
-                System.out.println(csvReader.getRawRecord());  // 获取整行string
-
-                String[] values = csvReader.getValues();
-                writeFileToCsv(values, "D:/demo2.csv");
-
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            CsvReader csvReader = new CsvReader("e:/lcfx_data/demo1.csv", ',', Charset.forName("UTF-8"));
+//            while (csvReader.readRecord()) {
+//                System.out.print(csvReader.get(0) + " " +  csvReader.get(1) +  " " +  csvReader.get(2) + "\n");
+//                System.out.println(csvReader.getRawRecord());  // 获取整行string
+//
+//               // String[] values = csvReader.getValues();
+//                //writeFileToCsv(values, "D:/demo2.csv");
+//
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Test
@@ -359,7 +360,16 @@ public class CsvDemo {
 
     @Test
     public void read2() {
-        File f = new File("d:/ d")
+        StringBuilder sb = new StringBuilder("e:/lcfx_data");
+        String path = sb.toString();
+        File file = new File(path);
 
+        String f = sb.append(File.separator).append("demo1").append(".csv").toString();
+
+        try {
+            new CsvReader(f);
+        } catch (FileNotFoundException e) {
+            e.getStackTrace();
+        }
     }
 }

@@ -186,8 +186,17 @@ public class TestMapDB {
         map.put("2", "efc");
 
         db.commit();
+        System.out.println(map.get("2"));
 
-        System.out.println(map.get("3"));
+        map.clear();
+        System.out.println(map.get("2"));
+        db.commit();
+
+        map.put("1", "abc");
+        map.put("2", "efc");
+
+        db.commit();
+        System.out.println(map.get("2"));
 
     }
 

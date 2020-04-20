@@ -143,4 +143,18 @@ public class FastJsonTest {
         System.out.println(entity1);
     }
 
+
+
+    @Test
+    public void test4() {
+        String jsonStr = "{tab=data_open_close_time, ope=UPDATE, hp=192.168.1.113:3306, db=sms, sId=301}";
+
+        JSONObject jsonObject1 = JSON.parseObject(jsonStr);
+
+        JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+
+
+        System.out.println(jsonObject);
+    }
+
 }
