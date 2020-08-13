@@ -1,0 +1,144 @@
+# canal
+canal:
+  server:
+    host: localhost
+    port: 11113
+
+qpid:
+  url: amqp://guest:guest@clientid/test?failover='singlebroker'&brokerlist='tcp://qpid-cdh.qa.sumscope.com:5672?tcp_nodelay='true'&connecttimeout='2000''
+
+monitor:
+  db:
+    d111:
+      db_name: eform
+      source_id: 111
+      address: 192.168.1.220:3306
+      table:
+        bb_issuer_code: 60000
+        kongfu_bond_guarantor_information: 60001
+        kongfu_bond_information: 60002
+        kongfu_bond_rating: 60003
+        kongfu_corporate_ratings: 60004
+        kongfu_issuer_description: 60005
+        institution_info: 60006
+        institution_rating: 60007
+        kongfu_involved_parties: 60008
+        additional_issue_info: 60009
+        auction_info: 60010
+        institution: 600011
+        bond_fundamental_info: 60012
+        abs_basic_info: 60013
+        abs_related_parties: 60014
+        initial_abs_pool_info: 60015
+        initial_abs_pool_distri: 60016
+        abs_bond_sensitivity: 60017
+        wallstreet_bond_news0: 60018
+        wallstreet_bond_news1: 60019
+        wallstreet_bond_news2: 60020
+        wallstreet_bond_news3: 60021
+        wallstreet_bond_news4: 60022
+        wallstreet_bond_news5: 60023
+        wallstreet_bond_news6: 60024
+        wallstreet_bond_news7: 60025
+        wallstreet_bond_news8: 60026
+        wallstreet_bond_news9: 60027
+        wallstreet_bond_news10: 60028
+        wallstreet_bond_news11: 60029
+        wallstreet_bond_news12: 60030
+        wallstreet_bond_news13: 60031
+        wallstreet_bond_news14: 60032
+        fund_objectives: 60033
+      d100:
+        db_name: ss_product
+        source_id: 100
+        address: 172.16.97.137:3306
+        table:
+          cdc_bond_valuation: 61000
+          cdc_special_bond_valuation: 61001
+          macro_base_index_values: 508021
+          bond_coupon_rate: 61003
+          bond: 61004
+          bond_fundamental_info: 61005
+          holiday_info: 61006
+          institution: 61007
+          p_issuer_info: 61008
+          p_bond_list_info: 61009
+          p_bond_rating: 61010
+          p_conversion_factor: 61011
+          p_dict_holiday: 61012
+          p_dict_qb_bond_list: 61013
+          p_institution_rating: 61014
+          p_province_info: 61015
+          p_selective_info: 61016
+          p_sw_sector_info: 61017
+          p_underwriter_info: 61018
+          p_dict_macro_index: 61019
+          additional_issue_info: 61020
+      d119:
+        db_name: sdn_database_qa01
+        source_id: 119
+        address: mozi-vm.sumscope.com:3306
+        table:
+          ihsmarkit_us_benchmark: 62000
+          ihsmarkit_kongfu_information: 62001
+      d123:
+        db_name: wf_web_ncd_qa01
+        source_id: 123
+        address: mozi-vm.sumscope.com:3306
+        table:
+          quote_all: 63000
+      d124:
+        db_name: wf_mm_cfets_qa01
+        source_id: 124
+        address: mozi-vm.sumscope.com:3306
+        table:
+          mm_kline_days: 64000
+      d125:
+        db_name: ngpc
+        source_id: 125
+        address: 172.16.66.184:3306
+        table:
+          credb_bond: 65000
+          bond_tender: 65001
+          bond_tender_detail: 65002
+      d127:
+        db_name: wf_local_gov_debt_qa01
+        source_id: 127
+        address: mozi-vm.sumscope.com:3306
+        table:
+          auction: 66001
+      d130:
+        db_name: sdb_config
+        source_id: 130
+        address: mozi-vm.sumscope.com:3306
+        table:
+          sdb_sector: 508091
+          sdb_index_param_relation_items: 508093
+          sdb_index_attr: 508094
+          sdb_index_param_item: 508095
+          sdb_sector_tree_rule: 508099
+          sdb_table_relation: 508100
+          sdb_data_version: 508100
+      d132:
+        db_name: cdh_cls
+        source_id: 132
+        address: mozi-vm.sumscope.com:3306
+        table:
+          hongan_article_bond_anno: 508101
+          hongan_article_news: 508102
+          hongan_article_stock_relation: 508103
+          hongan_bm_security_relation: 508104
+          hongan_bond_pub_opinion_risk_score: 508105
+          hongan_comp_pub_opinion_risk_score: 508106
+          label_bond: 508107
+          label_comp: 508108
+
+
+
+
+
+
+
+
+
+# Map<String, Pojon>
