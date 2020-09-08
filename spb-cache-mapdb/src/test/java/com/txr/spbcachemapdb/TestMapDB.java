@@ -125,7 +125,7 @@ public class TestMapDB {
 
        // .fileChannelEnable() /  .readOnly()  //只能用一个
         Atomic.Long aa = db.atomicLong("aa").createOrOpen();
-
+        System.out.println(aa);
         aa.incrementAndGet();
 
         System.out.println(aa);

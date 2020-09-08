@@ -22,7 +22,10 @@ public class IdUtils {
 
     public static String INSTANT () {
         Instant instant = Instant.now();
-        return String.valueOf(instant.toEpochMilli());
+        System.out.println(instant.toEpochMilli());
+        // 微妙 + 纳秒
+        System.out.println(instant.getNano());
+        return null;
     }
 
     public static String RANDOM () {
@@ -30,4 +33,17 @@ public class IdUtils {
         int randomNum = random.nextInt(999);
         return String.valueOf(randomNum);
     }
+
+
+    public static void main(String[] args) {
+
+        int i = 100;
+        while (i > 0) {
+            // String s = IdUtils.CURRENT_TIME_MILLIS();
+            String s = IdUtils.INSTANT();
+            //System.out.println(s);
+            i--;
+        }
+    }
+
 }

@@ -1,8 +1,11 @@
 package txr.common.date;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by xinrui.tian on 2018/11/9.
@@ -53,5 +56,29 @@ public class DateTimeUtils {
             return null;
         }
         return localDateTime;
+    }
+
+    /**
+     * 计算两个日期之间的的日期
+     */
+    public static List<LocalDate> getBetweenDate(String beforDate, String afterDate) {
+        LocalDate beforLocalDate = null;
+        LocalDate afterLocalDate = null;
+        try {
+            beforLocalDate = LocalDate.parse(beforDate);
+            afterLocalDate = LocalDate.parse(afterDate);
+        } catch (DateTimeException de) {
+            //log.warn(String.format("Time conversion error:[beforDate: %s, afterDate: %s]", beforDate, afterDate));
+        }
+        List<LocalDate> localDates = new ArrayList<>();
+        if (beforLocalDate == null || afterLocalDate == null){
+            return localDates;
+        }
+        long day = afterLocalDate.toEpochDay() - beforLocalDate.toEpochDay();
+        //包含beforDate，不包含afterDate
+        for (long i = 0; i <= day; i++) {
+            localDates.add(beforLocalDate.plusDays(i));
+        }
+        return localDates;
     }
 }

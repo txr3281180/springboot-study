@@ -20,4 +20,22 @@ public class PathUtils {
         return path;
     }
 
+
+    public static String createDbFilePath(String dbFilePath) {
+        if (dbFilePath == null || "".equals(dbFilePath.trim())) {
+            dbFilePath = System.getProperty("user.dir") + "/db";
+        }
+
+        File file = new File(dbFilePath);
+        if (!file.exists() && !file.isDirectory()) {
+            file.mkdirs();
+        }
+
+        return dbFilePath;
+    }
+
+    public static String buildDBFile(String dbPath, String dbName) {
+        return dbPath + File.separator + dbName + ".db";
+    }
+
 }

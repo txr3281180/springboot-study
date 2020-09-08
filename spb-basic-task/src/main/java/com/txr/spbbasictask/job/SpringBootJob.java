@@ -20,7 +20,7 @@ public class SpringBootJob {
     /**
      * 每xx中第xx执行一次
      */
-    @Scheduled(cron = "* 30 * * * *")
+    @Scheduled(cron = "* 30 * * * *", zone = "Asia/Shanghai")
     public void timedTaskCron() {
         logger.info(" >>>>>>>>>>>>>>>>>>>> SpringBoot 定时任务调度执行 cron <<<<<<<<<<<<<<<<<<<< ");
     }
@@ -28,7 +28,7 @@ public class SpringBootJob {
     /**
      * 每xx执行一次
      */
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 60000, zone = "Asia/Shanghai")
     public void timedTaskDelay() {
         logger.info("SpringBoot 延迟调用执行 fixedDelay -->" + count++);
     }
