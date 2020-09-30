@@ -266,7 +266,13 @@ public class TestMapDB {
 
         map.put(1, "one");
         map.put(2, "two");
-     //   map.keySet(); //is now [1,2] even before commit
+
+        Map<Integer, String> javaMap = new HashMap<>();
+        javaMap.put(3, null);
+        //map.put(4, null);   // map db 值为null 报空指针
+        map.putAll(javaMap);
+
+        //   map.keySet(); //is now [1,2] even before commit
 
         db.commit();  //persist changes into disk
 
