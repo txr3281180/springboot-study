@@ -66,8 +66,6 @@ public class SpbBasicApplicationTests {
         for (String s : systemProperties.keySet()) {
             System.out.println(s + "======>" + systemProperties.get(s));
         }
-
-
     }
 
 }

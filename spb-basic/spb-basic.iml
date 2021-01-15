@@ -110,5 +110,7 @@
     <orderEntry type="library" name="Maven: com.txr:txr-common-utils:1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.belerweb:pinyin4j:2.5.1" level="project" />
     <orderEntry type="library" name="Maven: com.txr:spb-basic-starter:0.0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-model:3.0" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-utils:2.0.4" level="project" />
   </component>
 </module>

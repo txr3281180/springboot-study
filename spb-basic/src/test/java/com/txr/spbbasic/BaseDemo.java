@@ -358,4 +358,10 @@ public class BaseDemo {
 
     }
 
+    @Test
+    public void testMath() {
+        System.out.println(Math.ceil(3.0));
+        System.out.println(Math.ceil(3.1));
+    }
+
 }
